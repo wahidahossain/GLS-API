@@ -1,0 +1,56 @@
+{
+    "division": "Freight",
+    "category": "Freight",
+    "paymentType": "Prepaid",
+    "billingAccount": "14358256",
+    "note": "Freight note testing.....",
+    "sender": {
+        "addressLine1": "2344 S Sheridan Way,  ON ",
+        "city": "Mississauga",
+        "provinceCode": "ON",
+        "postalCode": "L5J 2M4",
+        "countryCode": "CA",
+        "customerName": "JRP Inc.",
+        "contact": {
+            "fullName": "JRP Inc.",
+            "language": "EN",
+            "email": "wahida1@jrponline.com",
+            "department": "accounts",
+            "telephone": "4194971550"
+        }
+    },
+    "consignee": {
+        "addressLine1": "1264 Stone Road",
+        "city": "Oxford Mills",
+        "provinceCode": "ON",
+        "postalCode": "K0G1S0",
+        "countryCode": "CA",
+        "customerName": "Mottified PF",
+        "contact": {
+            "fullName": "Ryan Mott",
+            "language": "EN",
+            "email": "getmottified@gmail.com",
+            "department": "none",
+            "telephone": "6137946688"
+        }
+    },
+    "unitOfMeasurement": "KC",
+    "parcels": [
+        {
+            "parcelType": "Box",
+            "quantity": 1,
+            "weight": 1.6,
+            "length": 12,
+            "depth": 12,
+            "width": 12
+        }
+    ],
+    "surcharges": [
+        {
+            "type": "COD",
+            "value": "333"
+        }
+    ],
+    "createDate": "2023-01-12 11:45:22",
+    "deliveryType": "GRD"
+}
