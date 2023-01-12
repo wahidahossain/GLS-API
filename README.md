@@ -7,4 +7,4 @@ GLS API documentation link:
 https://smart4i.dicom.com/documentation/index
 
 JRP link:
-https://www.jrpdatapoint.com
+https://www.insights.jrponline.com/
