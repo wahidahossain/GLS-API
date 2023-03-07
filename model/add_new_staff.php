@@ -79,10 +79,10 @@ include ("notify.php");
 
 
 // if($result2){
-    print("<script>window.alert('Staff information added successfully');</script>");    
+    //print("<script>window.alert('Staff information added successfully');</script>");    
 // } 
 }
-print("<script>window.location='../superadmin/dashboard.php'</script>");
+print("<script>window.location='../superadmin/add_new_staff.php'</script>");
 
 ?>
 <?php

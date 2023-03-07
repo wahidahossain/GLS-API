@@ -121,7 +121,8 @@ else
 // ====================================== API setup ==========================================
 $billing_account_id = $row['billing_account_id'];
 
-$url = "https://sandbox-smart4i.dicom.com/v1/shipment/";
+$url = "https://sandbox-smart4i.dicom.com/v1/shipment/";               // NEED TO Change -------------------------
+//$url = "https://smart4i.dicom.com/v1/shipment/";
 $username = 'wahida@jrponline.com';
 $password = 'Dicom.123';
 
@@ -136,6 +137,10 @@ curl_setopt($curl, CURLOPT_USERPWD, $username . ':' . $password);
 curl_setopt($curl, CURLOPT_URL, $url);
 curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json', 'Content-Type: application/json'));
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//SSL verify disabled
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
 //==================================================== WITH HAZMAT
 $data = 

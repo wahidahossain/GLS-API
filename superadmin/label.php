@@ -14,13 +14,18 @@ session_start();
 <?php
 include ("../model/connect.php");
 $id = $_REQUEST['id'];
-$url = "https://sandbox-smart4i.dicom.com/v1/shipment/label/".$id;
+$url = "https://sandbox-smart4i.dicom.com/v1/shipment/label/".$id;     // NEED TO Change -------------------------
+//$url = "https://smart4i.dicom.com/v1/shipment/label/".$id;
 $username = 'wahida@jrponline.com';
 $password = 'Dicom.123';
 
 //Initiate cURL.
 $curl = curl_init($url);
 curl_setopt($curl, CURLOPT_USERPWD, $username . ':' . $password); 
+
+//SSL verify disabled
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
 //$curl = curl_init();
 curl_setopt($curl, CURLOPT_URL, $url);
