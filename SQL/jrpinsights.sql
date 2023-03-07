@@ -480,10 +480,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`user_id`, `first_name`, `last_name`, `username`, `password`, `email`, `account_status`, `logcount`, `last_login`, `ip`, `account_type`, `user_excol1`, `user_excol2`, `user_excol3`, `user_excol4`) VALUES
-(1, 'Wahida ', 'Hossain', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'wahida1@jrponline.com', '1', '177', '2023-03-03 19:37:12', '::1', 'superadmin', 'unblock', '1010RI', '$user_excol3', '$user_excol4'),
-(2, 'John', 'Montgomery', 'john', '8429890e896ddc373c58002f92f6b9af', 'monty@jrponline.com', '1', '42', '2023-01-11 21:39:57', '127.0.0.1', 'staff', 'unblock', '', '', ''),
-(55, 'scott', 'scott', 'scott', 'b5e010db004fd827a907642a5454467f', 'scott@jrponline.com', '1', '3', '2023-01-18 18:12:46', '127.0.0.1', 'staff', 'unblock', '', '', ''),
-(56, 'wahida', 'hossain', 'dev', '55bf491e3a9e8d733cfc0375176363be', 'wahida@jrponline.com', '1', '35', '2023-03-03 15:19:31', '127.0.0.1', 'dev', 'unblock', '', '', '');
+(1, 'Wahida ', 'Hossain', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'wahida1@test.com', '1', '1', '2023-03-03 19:37:12', '::1', 'superadmin', 'unblock', '1010RI', '$user_excol3', '$user_excol4'),
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
