@@ -1,15 +1,13 @@
 <?php
 
 session_start();
-$login=$_SESSION['login'];
+include('includes/session.php');
+if(isset($_SESSION['login'])){ 
 $account_type=$_SESSION['account_type'];
 $first_name=$_SESSION['first_name'];
 $user_id=$_SESSION['user_id'];
-
-
-
-if($login=="superadmin"){
-        $login=$_SESSION['login'];
+if($login=="superadmin")
+{       $login=$_SESSION['login'];
         $account_type=$_SESSION['account_type'];
         $first_name=$_SESSION['first_name'];
         $user_id=$_SESSION['user_id'];
@@ -34,6 +32,7 @@ if($login=="superadmin"){
   </div> -->
 
   <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
   <!-- <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="200"> -->
    
 
@@ -62,11 +61,11 @@ if($login=="superadmin"){
       </li>
 
       
-      <li class="nav-item">
-        <!-- <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+      <!-- <li class="nav-item">
+        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
-        </a> -->
-      </li>
+        </a>
+      </li> -->
       <!-- <li class="nav-item">
         <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
           <i class="fas fa-th-large"></i>
@@ -219,6 +218,7 @@ if($login=="superadmin"){
 
 <?php
         }
+      }
             
 else{
     

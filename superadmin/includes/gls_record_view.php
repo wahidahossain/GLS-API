@@ -11,6 +11,7 @@
                           <h3 class="card-title">GLS Shipping Records</h3>
                   </div>
               <div class="card-body">
+              <button onclick="history.go(-1);" class="btn bg-gradient-warning btn-flat btn-xs">Back</button> 
               <a href="shipping_list.php"><h3 class="float-right badge bg-danger">>> Go To All Shipment List</h3></a>
                 <!-- <a href="shipping_list.php">Go To All Shipment List</a> -->
                     <table id="example1" class="table table-bordered table-striped">
@@ -66,7 +67,12 @@
                                       $Address2 = mb_convert_encoding($row['Address2'], "UTF-8", "iso-8859-1");
                                       $City = mb_convert_encoding($row['City'], "UTF-8", "iso-8859-1");
                                       $Contact = mb_convert_encoding($row['Contact'], "UTF-8", "iso-8859-1");
-                                      $Email = mb_convert_encoding($row['Email'], "UTF-8", "iso-8859-1");
+                                      
+                                      $Email_rl = mb_convert_encoding($row['Email'], "UTF-8", "iso-8859-1");
+                                      //eliminate extra e-mails, keeps only first one------------------                                                                            
+                                      $keywords = preg_split('/[;]/', $Email_rl,-1, PREG_SPLIT_NO_EMPTY);
+                                      $Email = $keywords[0];
+                                      //end of eliminate extra e-mails, keeps only first one-----------
                                       $Province = trim($row['Province']);
                                       $PostalCode = trim($row['PostalCode']);
                                       $Phone = trim($row['Phone']);

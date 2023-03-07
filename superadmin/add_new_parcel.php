@@ -9,7 +9,8 @@ session_start();
 // } else {
 //   echo "No login";
 // }  
-$login=$_SESSION['login'];
+include('includes/session.php');
+if(isset($_SESSION['login'])){ 
 $account_type=$_SESSION['account_type'];
 $first_name=$_SESSION['first_name'];
 $user_id=$_SESSION['user_id'];
@@ -25,11 +26,91 @@ if($login=="superadmin")
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>JRP Insight| Dashboard</title>
-
+<?php
+  $OrderNumber = $_REQUEST['OrderNumber'];
+  $jrp_account_no = $_REQUEST['jrp_account_no'];
+  ?>
+  <script type="text/javascript">
+  function getval(sel)
+  {  
+    self.location='add_new_parcel.php?OrderNumber=<?php echo $OrderNumber;?>&jrp_account_no=<?php echo $jrp_account_no;?>&tp='+ sel.value;
+  }
+  </script>
   <?php
   include("includes/css.php");
   ?>
 <!-- OnClick Event Handler -->
+<!-- pop up css start -->
+<style>
+      * {
+        box-sizing: border-box;
+      }
+      .openBtn {
+        display: flex;
+        justify-content: left;
+      }
+      .openButton {
+        border: none;
+        border-radius: 5px;
+        background-color: #1c87c9;
+        color: white;
+        padding: 14px 20px;
+        cursor: pointer;
+        position: fixed;
+      }
+      .loginPopup {
+        position: relative;
+        text-align: center;
+        width: 100%;
+      }
+      .formPopup {
+        display: none;
+        position: fixed;
+        left: 45%;
+        top: 5%;
+        transform: translate(-50%, 5%);
+        border: 3px solid #999999;
+        z-index: 9;
+      }
+      .formContainer {
+        max-width: 300px;
+        padding: 20px;
+        background-color: #fff;
+      }
+      .formContainer input[type=text],
+      .formContainer input[type=password] {
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 20px 0;
+        border: none;
+        background: #eee;
+      }
+      .formContainer input[type=text]:focus,
+      .formContainer input[type=password]:focus {
+        background-color: #ddd;
+        outline: none;
+      }
+      .formContainer .btn {
+        padding: 12px 20px;
+        border: none;
+        background-color: #8ebf42;
+        color: #fff;
+        cursor: pointer;
+        width: 100%;
+        margin-bottom: 15px;
+        opacity: 0.8;
+      }
+      .formContainer .cancel {
+        background-color: #cc0000;
+      }
+      .formContainer .btn:hover,
+      .openButton:hover {
+        opacity: 1;
+      }
+    </style>
+<!-- pop up css end -->
+
+
 
 
 
@@ -43,6 +124,7 @@ if($login=="superadmin")
   </div> -->
 
   <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
   <!-- <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="200"> -->
    
 
@@ -71,11 +153,11 @@ if($login=="superadmin")
       </li>
 
       
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
-      </li>
+      </li> -->
     </ul>
   </nav>
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -192,6 +274,7 @@ if($login=="superadmin")
 
 <?php
         }
+      }
             
 else{
     

@@ -10,7 +10,8 @@
                        </div>
                        <div>                
                  </div>
-                       <div class="card-body">                
+                       <div class="card-body"> 
+                       <button onclick="history.go(-1);" class="btn bg-gradient-warning btn-flat btn-xs">Back</button>                
                          <table id="example1" class="table table-bordered table-striped">
                            <thead>
                            <tr>
@@ -34,14 +35,15 @@
                            <?php
                          include ("../model/connect.php");
                          error_reporting(0);        
-                         $result = mysqli_query($con, "SELECT * FROM `new_shipment` WHERE `category`='freight' ORDER BY `new_shipment`.`new_shipment_id` DESC");
+                         $result = mysqli_query($con, "SELECT * FROM `new_shipment` WHERE `category`='freight' GROUP BY `col_5` ORDER BY `new_shipment`.`new_shipment_id` DESC");
                          $count = 0;
                          while ($row = mysqli_fetch_array($result))
                          {
                              $count = $count + 1;
                              $new_shipment_id = $row['new_shipment_id'];
+                             $col_5 = $row['col_5'];
                             // Get rate table information ============================================
-                            $result_rate = mysqli_query($con, "SELECT * FROM `trackingnumber` WHERE `new_shipment_id`='$new_shipment_id'");
+                            $result_rate = mysqli_query($con, "SELECT * FROM `trackingnumber` WHERE `col_1` = '$col_5'");
                             $row_rate = mysqli_fetch_array($result_rate);
                             $trackingNumber = $row_rate['trackingNumber'];
                             $id = $row_rate['id'];
@@ -56,7 +58,7 @@
 
                             // Get consignee table information ============================================
                              $consignee_id = $row['consignee_id'];
-                             $result_consignee = mysqli_query($con, "SELECT * FROM `consignee` WHERE `consignee_id`='$consignee_id'");
+                             $result_consignee = mysqli_query($con, "SELECT * FROM `consignee` WHERE `consignee_id` = '$consignee_id'");
                                 $row_consignee = mysqli_fetch_array($result_consignee);
                                 $consignee_addressLine1 = $row_consignee['addressLine1'];
                                 $consignee_province = $row_consignee['province'];
@@ -136,7 +138,8 @@
                                }
                                ?> 
                                </td>
-                               <td><?php echo $rate;?></td>
+                               <td><a href="rate_details.php?id=<?php echo $id;?>" target="_blank"><img src="dist/img/download.png" width="15px"></a>
+                                <?php echo $rate;?></td>
                                <td><?php echo $bv_rate;?></td>
                                <td><?php echo $createDate;?></td>
                                <td><?php echo "<a href='shipping_details.php?new_shipment_id=".$new_shipment_id."' target='_blank'>Details</a>";?></td>

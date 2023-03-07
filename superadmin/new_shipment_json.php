@@ -1,23 +1,38 @@
 <?php
 session_start();
-        $login=$_SESSION['login'];
+include('includes/session.php');
+if(isset($_SESSION['login'])){ 
+$account_type=$_SESSION['account_type'];
+$first_name=$_SESSION['first_name'];
+$user_id=$_SESSION['user_id'];
+if($login=="superadmin")
+{       $login=$_SESSION['login'];
         $account_type=$_SESSION['account_type'];
         $first_name=$_SESSION['first_name'];
         $user_id=$_SESSION['user_id'];
-
- if($login=="superadmin"){
- $account_type=$_SESSION['account_type'];
-        $first_name=$_SESSION['first_name'];
-        $user_id=$_SESSION['user_id'];
     ?>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JRP Insight| Dashboard</title>
+  <?php
+  include("includes/css.php");
+  ?>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
 <?php
 include ("../model/connect.php");
+error_reporting(0);
 $new_shipment_id = $_REQUEST['new_shipment_id'];
 $OrderNumber = $_REQUEST['OrderNumber'];
 $jrp_acc_no = $_REQUEST['jrp_acc_no'];
+$col_5 = $_REQUEST['col_5'];
 
 //$result = mysqli_query($con, "SELECT JSON_ARRAYAGG(JSON_OBJECT(billing_account_id, sender_id, consignee_id, division, category, paymentType)) FROM `new_shipment` limit 1");
-$result = mysqli_query($con, "SELECT * FROM `new_shipment` WHERE `new_shipment_id`='$new_shipment_id'");
+$result = mysqli_query($con, "SELECT * FROM `new_shipment` WHERE `col_5`='$col_5'");
 
 while ($row = mysqli_fetch_array($result))
 {   
@@ -121,7 +136,7 @@ else
 // ====================================== API setup ==========================================
 $billing_account_id = $row['billing_account_id'];
 
-$url = "https://sandbox-smart4i.dicom.com/v1/shipment/";               // NEED TO Change -------------------------
+$url = "https://sandbox-smart4i.dicom.com/v1/shipment/";     // NEED TO Change -------------------------
 //$url = "https://smart4i.dicom.com/v1/shipment/";
 $username = 'wahida@jrponline.com';
 $password = 'Dicom.123';
@@ -139,89 +154,8 @@ curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json', 'Conten
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
 //SSL verify disabled
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-
-//==================================================== WITH HAZMAT
-$data = 
-[   
-    'division'=> $division,
-    'category'=> $category,
-    'paymentType'=> $paymentType,
-    'billingAccount'=> $billing_account,
-    'note'=> $note,
-        'sender'=> [
-           
-         'addressLine1'=> $sender_addressLine1,
-         'city'=> $sender_city,
-         'provinceCode'=> $sender_province,
-         'postalCode'=> $sender_postalCode,
-         'countryCode'=> $sender_countryCode,
-         'customerName'=> $sender_customerName,
-         'contact'=>[            
-                'fullName'=> $sender_fullName,
-                'language'=>  'EN',
-                'email'=> $sender_email,
-                'department'=> $sender_department,
-                'telephone'=> $sender_telephone,
-            ]
-        ],
-        'consignee'=> [       
-         'addressLine1'=> $consignee_addressLine1,
-         'city'=> $consignee_city,
-         'provinceCode'=> $consignee_province,
-         'postalCode'=> $consignee_postalCode,
-         'countryCode'=> $consignee_countryCode,
-         'customerName'=> $consignee_customerName,
-         'contact'=> [                                
-             'fullName'=> $consignee_fullName,
-             'language'=>  'EN',
-             'email'=> $consignee_email,
-             'department'=> $consignee_department,
-             'telephone'=> $consignee_telephone,
-            ]
-        ],
-        'unitOfMeasurement'=> $unitOfMeasurement,         
-        'parcels'=> [
-            [               
-                'parcelType'=> $parcelType,
-                'quantity'=> $quantity,
-                'weight'=> $weight,
-                'length'=> $length,
-                'depth'=> $depth,
-                'width'=> $width,
-                'hazmat'=> [
-                    'phone'=> $h_phone,
-                    'erapReference'=> $h_erapReference,
-                    'number'=> $h_number,
-                    'shippingName'=> $h_shippingName,
-                    'primaryClass'=> $h_primaryClass,
-                    'subsidiaryClass'=> $h_subsidiaryClass,
-                    'toxicByInhalation'=> $h_toxicByInhalation,
-                    'packingGroup'=> $h_packingGroup,
-                    'hazmatType'=> $h_hazmatType,
-                ],
-                'groupId'=> 1,
-                'requestReturnLabel'=> $requestReturnLabel, 
-                'returnWaybill'=> $returnWaybill                
-            ]
-        ],
-        'surcharges'=> [
-            [
-                'type'=> $surcharges_type,
-		        'value'=> $surcharges_value
-            ]
-        ],
-        'createDate'=> $createDate,
-        'deliveryType'=> $deliveryType,
-        'references'=> [
-            [
-             'type'=> $references_type,
-             'code'=> $references_code,
-            ]
-        ]    
-    ];
-
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
         include ("includes/hazmat.php"); //========================================================== ALL Hazmat Data File
         //var_dump($data);
@@ -261,11 +195,7 @@ $data =
             fwrite($fp, $jsonString);
             fclose($fp);
         }
-
-
 }
-
-
 $resp = curl_exec($curl);
 if(curl_errno($curl)){
     //If an error occured, throw an Exception.
@@ -289,7 +219,7 @@ if (is_array($json_resp) || is_object($json_resp))
 {     
     if(isSet($set1_id)){ 
         $sql1="INSERT INTO `trackingnumber` (`trackingNumber_id`, `id`, `trackingNumber`, `rate`, `new_shipment_id`, `order_number`,`col_1`,`col_2`, `col_3`, `date`) 
-        VALUES (NULL, '$set1_id', '$set1_trackingNumber', '', '$new_shipment_id', '$OrderNumber', '','$user_id', '', NOW());";
+        VALUES (NULL, '$set1_id', '$set1_trackingNumber', '', '$new_shipment_id', '$OrderNumber', '$col_5','$user_id', '', NOW());";
 
 $result2=mysqli_query($con, $sql1) or die( 'Couldnot execute query'. mysqli_error($con));
 print("<script>window.location='get_rate.php?id=".$set1_id."&trackingNumber=".$set1_trackingNumber."&new_shipment_id=".$new_shipment_id."&type=parcel&jrp_acc_no=$jrp_acc_no&OrderNumber=$OrderNumber'</script>");
@@ -298,11 +228,21 @@ print("<script>window.location='get_rate.php?id=".$set1_id."&trackingNumber=".$s
         // If data not inserted into `trackingnumber` : delete shiping information from the new shipment table.==============
 
         $sql1_del_shipment ="DELETE FROM `new_shipment` WHERE `new_shipment`.`new_shipment_id` = '$new_shipment_id'; ";
-        $result2_del_shipment = mysqli_query($con, $sql1_del_shipment) or die( 'Couldnot execute query'. mysql_error());
+        $result2_del_shipment = mysqli_query($con, $sql1_del_shipment) or die( 'Couldnot execute query'. mysqli_error($con));
+         //delete consignee================================
+         $sql1_del_consignee ="DELETE FROM `consignee` WHERE `consignee`.`consignee_id` = '$consignee_id'; ";
+         $result2_del_consignee = mysqli_query($con, $sql1_del_consignee) or die( 'Couldnot execute query'. mysqli_error($con));
+         
+        $json2 = json_encode(json_decode($resp), JSON_PRETTY_PRINT);
+        echo '<pre>' . $json2 . '</pre>';
 
-
-        print("<script>window.alert('Shipment Add Unsuccessful, Please Try again!!');</script>");
-        print("<script>window.location='add_new_parcel.php?jrp_account_no=$jrp_acc_no&OrderNumber=$OrderNumber'</script>");
+        //print("<script>window.alert('Shipment Add Unsuccessful, Data missing or wrong information added, Please Try again!!');</script>");
+        //print("<script>window.location='add_new_parcel.php?jrp_account_no=$jrp_acc_no&OrderNumber=$OrderNumber'</script>");
+    
+        ?>
+        <button class='btn btn-primary submit-button' onclick="location.href='add_new_parcel.php?jrp_account_no=<?php echo $jrp_acc_no;?>&OrderNumber=<?php echo $OrderNumber;?>'" type="button">
+                 Process Again</button>
+            <?php
     }
 
 //echo $code = http_response_code();
@@ -310,16 +250,35 @@ print("<script>window.location='get_rate.php?id=".$set1_id."&trackingNumber=".$s
 }
 
 else{
-    //echo "<br />Not working";
-    print("<script>window.alert('Shipment form was not filled up correctly, try again!!');</script>");
-    print("<script>window.location='add_new_parcel.php?jrp_account_no=$jrp_acc_no&OrderNumber=$OrderNumber'</script>");
-}
+    $json2 = json_encode(json_decode($resp), JSON_PRETTY_PRINT);
+        echo '<pre>' . $json2 . '</pre>';
 
+    //delete shipment ================================
+    $sql1="DELETE FROM `new_shipment` WHERE `new_shipment`.`new_shipment_id` = '$new_shipment_id'; ";
+    $result2=mysqli_query($con, $sql1) or die( 'Couldnot execute query'. mysqli_error($con));
+
+    //delete consignee================================
+    $sql1_del_consignee ="DELETE FROM `consignee` WHERE `consignee`.`consignee_id` = '$consignee_id'; ";
+    $result2_del_consignee = mysqli_query($con, $sql1_del_consignee) or die( 'Couldnot execute query'. mysqli_error($con));
+
+    //echo "<br />Not working";
+    //print("<script>window.alert('Shipment form was not filled up correctly, try again!!');</script>");
+    //print("<script>window.location='add_new_parcel.php?jrp_account_no=$jrp_acc_no&OrderNumber=$OrderNumber'</script>");
+    ?>
+    <button class='btn btn-primary submit-button' onclick="location.href='add_new_parcel.php?jrp_account_no=<?php echo $jrp_acc_no;?>&OrderNumber=<?php echo $OrderNumber;?>'" type="button">
+             Process Again</button>
+        <?php
+}
 //header("Location: get_rate.php?id='.$set1_id.'");
 //print("<script>window.location='<a href='get_rate.php?id=".$set1_id."' target='_blank'>".$set1_trackingNumber."</a>'</script>");
 
 ?>
+</div>
+</body>
+</html>
+
 <?php
+}
 }
 else{
     print("<script>window.alert('Sorry Your are not Logged in');</script>");

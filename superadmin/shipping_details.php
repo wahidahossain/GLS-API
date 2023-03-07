@@ -1,12 +1,13 @@
 <?php
 session_start();
-        $login=$_SESSION['login'];
+include('includes/session.php');
+if(isset($_SESSION['login'])){ 
+$account_type=$_SESSION['account_type'];
+$first_name=$_SESSION['first_name'];
+$user_id=$_SESSION['user_id'];
+if($login=="superadmin")
+{       $login=$_SESSION['login'];
         $account_type=$_SESSION['account_type'];
-        $first_name=$_SESSION['first_name'];
-        $user_id=$_SESSION['user_id'];
-
- if($login=="superadmin"){
- $account_type=$_SESSION['account_type'];
         $first_name=$_SESSION['first_name'];
         $user_id=$_SESSION['user_id'];
     ?>
@@ -16,12 +17,12 @@ include("includes/css.php");
 error_reporting(0);
 
 
-$new_shipment_id = $_REQUEST['new_shipment_id'];
+$col_5 = $_REQUEST['col_5'];
 //$result = mysqli_query($con, "SELECT JSON_ARRAYAGG(JSON_OBJECT(billing_account_id, sender_id, consignee_id, division, category, paymentType)) FROM `new_shipment` limit 1");
-$result = mysqli_query($con, "SELECT * FROM `new_shipment` WHERE `new_shipment_id`='$new_shipment_id'");
+$result = mysqli_query($con, "SELECT * FROM `new_shipment` WHERE `col_5`='$col_5'");
 
-while ($row = mysqli_fetch_array($result))
-{   
+$row = mysqli_fetch_array($result);
+   
 $billing_account_id = $row['billing_account_id'];
 $result_billing_account = mysqli_query($con, "SELECT `billing_account` FROM `billing_account` WHERE `billing_account_id`='$billing_account_id'");
 $row_billing_account = mysqli_fetch_array($result_billing_account);
@@ -64,12 +65,7 @@ $category = $row['category'];
 $paymentType = $row['paymentType'];
 $note = $row['note'];
 $unitOfMeasurement = $row['unitOfMeasurement'];
-$parcelType = $row['parcelType'];
-$quantity = (int)$row['quantity'];
-$weight = (float)$row['weight'];
-$length = (float)$row['length'];
-$depth = (float)$row['depth'];
-$width = (float)$row['width'];
+
 $hazmat = $row['hazmat'];
 $h_phone = $row['h_phone'];
 $h_erapReference = $row['h_erapReference'];
@@ -92,7 +88,10 @@ $references_type = $row['references_type'];
 $references_code = $row['references_code'];
 //$createDate = DATE_FORMAT($row['date'], "Y/m/d H:i:s");
 $createDate = $row['createDate'];
-
+$appointment_type = $row['col_2'];
+$appointment_phone = $row['col_1'];
+$appointment_date = $row['col_3'];
+$appointment_time = $row['col_4'];
 //==================================================================================================== RETURN
 $return_id = $row['return_id'];
 $result_return = mysqli_query($con, "SELECT * FROM `return` WHERE `return_id`='$return_id'");
@@ -109,17 +108,18 @@ $return_department = $row_return['department'];
 $return_telephone = $row_return['telephone'];
 
 // Get rate table information ============================================
-$result_rate = mysqli_query($con, "SELECT * FROM `trackingnumber` WHERE `new_shipment_id`='$new_shipment_id'");
+$result_rate = mysqli_query($con, "SELECT * FROM `trackingnumber` WHERE `col_1`='$col_5'");
 $row_rate = mysqli_fetch_array($result_rate);
 $trackingNumber = $row_rate['trackingNumber'];
 $rate = $row_rate['rate'];
 $order_number = $row_rate['order_number'];
+$id = $row_rate['id'];
 
 ?>
 
 <div class="card-body">
     <label><?php echo $rate;?></label>
-<table id="example1" class="table table-bordered table-striped">
+    <table id="example1" class="table table-bordered table-striped">
 <tr>
     <th height="36">Billing Acc: <?php echo $billing_account;?></th>
     <th>Sender: <?php echo $sender_postalCode;?></th>
@@ -127,13 +127,7 @@ $order_number = $row_rate['order_number'];
     <th>Division: <?php echo $division;?></th>
   </tr>
   <tr>
-    <td height="221" rowspan="2"><p>Parcel Type: <?php echo $parcelType;?><br>
-      Quantity: <?php echo $quantity;?><br />
-      Weight: <?php echo $weight;?><br />
-      Length: <?php echo $length;?><br />
-      Depth: <?php echo $depth;?><br />
-      Width: <?php echo $width;?></p>
-      <p>Request Return Label: <?php echo $requestReturnLabel;?><br />
+    <td height="221" rowspan="2"><p>Request Return Label: <?php echo $requestReturnLabel;?><br />
       Return Waybill: <?php echo $returnWaybill;?>
       </p>
     </td>
@@ -147,8 +141,7 @@ $order_number = $row_rate['order_number'];
     Subsidary Class: <?php echo $h_subsidiaryClass;?><br />
     Toxic By Inhalation: <?php echo $h_toxicByInhalation;?><br />
     Packing Group: <?php echo $h_packingGroup;?><br />
-    Description: <?php echo $h_description;?><br />
-    
+    Description: <?php echo $h_description;?><br />   
     
     </td>
     <td height="103">Surcharges: <?php echo $surcharges_type;?><br /> 
@@ -157,182 +150,43 @@ $order_number = $row_rate['order_number'];
     </td>
   </tr>
   <tr>
-    <td><b>Tracking Number: <?php echo $trackingNumber;?><br />
-    Rate: <?php echo $rate;?></b></td>
+    <td height="77"><b>Tracking Number: <?php echo $trackingNumber;?><br />
+    Rate: <?php echo $rate;?></b>
+<?php if($category=="Freight") { ?><br>Appointment: <?php echo $appointment_type;?><br><?php echo $appointment_phone." "; if($appointment_type=='Scheduled'){echo $appointment_date." "; echo $appointment_time;}?>
+
+</td>
   </tr>
   <tr>
     <td colspan="4">Note: <?php echo $note;?></td>
   </tr>
 </table>
+
+<?php } ?>
 </div>
-
-
 <?php
-//var_dump(json_encode($row));
-//echo json_decode($row);
-
-
-//ref: https://stackoverflow.com/questions/42900877/convert-mysql-database-to-json
-//============================= Working codes ==============================
-/*
-if ($result->num_rows > 0) {
-    $rows = $result->fetch_all(MYSQLI_ASSOC);
-
-    echo json_encode($rows);
-    //echo $rows['division'];
-} else {
-    echo "no results found";
-}
-*/
-
-// ====================================== API setup ==========================================
-//echo $billing_account_id = $row['billing_account_id'];
+$result_parcel_type = mysqli_query($con, "SELECT * FROM `new_shipment` WHERE `col_5`='$col_5'");
+while($row_result_parcel_type = mysqli_fetch_array($result_parcel_type)){
+$parcelType = $row_result_parcel_type['parcelType'];
+$quantity = (int)$row_result_parcel_type['quantity'];
+$weight = (float)$row_result_parcel_type['weight'];
+$length = (float)$row_result_parcel_type['length'];
+$depth = (float)$row_result_parcel_type['depth'];
+$width = (float)$row_result_parcel_type['width'];
+?>
+<table id="example1" class="table table-bordered table-striped">
+  <tr>
+    <td scope="col">Parcel Type: <?php echo $parcelType;?><br />
+Unit Of Measurement: <?php echo $unitOfMeasurement;?><br />
+Quantity: <?php echo $quantity;?><br />
+Weight: <?php echo $weight;?><br />
+Length: <?php echo $length;?><br />
+Depth: <?php echo $depth;?><br />
+Width: <?php echo $width;?></td>
+  </tr>
+</table>
+<?php
 $billing_account_id = $row['billing_account_id'];
 
-$url = "https://sandbox-smart4i.dicom.com/v1/shipment/";               // NEED TO Change -------------------------
-//$url = "https://smart4i.dicom.com/v1/shipment/";
-$username = 'wahida@jrponline.com';
-$password = 'Dicom.123';
-
-//Initiate cURL.
-$curl = curl_init($url);
-
- 
-//Specify the username and password using the CURLOPT_USERPWD option.
-curl_setopt($curl, CURLOPT_USERPWD, $username . ':' . $password); 
-
-//$curl = curl_init();
-curl_setopt($curl, CURLOPT_URL, $url);
-curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json', 'Content-Type: application/json'));
-curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-//SSL verify disabled
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-
-//==================================================== WITH HAZMAT
-$data = 
-[   
-    'division'=> $division,
-    'category'=> $category,
-    'paymentType'=> $paymentType,
-    'billingAccount'=> $billing_account,
-    'note'=> $note,
-        'sender'=> [
-           
-         'addressLine1'=> $sender_addressLine1,
-         'city'=> $sender_city,
-         'provinceCode'=> $sender_province,
-         'postalCode'=> $sender_postalCode,
-         'countryCode'=> $sender_countryCode,
-         'customerName'=> $sender_customerName,
-         'contact'=>[            
-                'fullName'=> $sender_fullName,
-                'language'=>  'EN',
-                'email'=> $sender_email,
-                'department'=> $sender_department,
-                'telephone'=> $sender_telephone,
-            ]
-        ],
-        'consignee'=> [       
-         'addressLine1'=> $consignee_addressLine1,
-         'city'=> $consignee_city,
-         'provinceCode'=> $consignee_province,
-         'postalCode'=> $consignee_postalCode,
-         'countryCode'=> $consignee_countryCode,
-         'customerName'=> $consignee_customerName,
-         'contact'=> [                                
-             'fullName'=> $consignee_fullName,
-             'language'=>  'EN',
-             'email'=> $consignee_email,
-             'department'=> $consignee_department,
-             'telephone'=> $consignee_telephone,
-            ]
-        ],
-        'unitOfMeasurement'=> $unitOfMeasurement,         
-        'parcels'=> [
-            [               
-                'parcelType'=> $parcelType,
-                'quantity'=> $quantity,
-                'weight'=> $weight,
-                'length'=> $length,
-                'depth'=> $depth,
-                'width'=> $width,
-                'hazmat'=> [
-                    'phone'=> $h_phone,
-                    'erapReference'=> $h_erapReference,
-                    'number'=> $h_number,
-                    'shippingName'=> $h_shippingName,
-                    'primaryClass'=> $h_primaryClass,
-                    'subsidiaryClass'=> $h_subsidiaryClass,
-                    'toxicByInhalation'=> $h_toxicByInhalation,
-                    'packingGroup'=> $h_packingGroup,
-                    'hazmatType'=> $h_hazmatType,
-                ]            
-            ]
-        ],
-        'surcharges'=> [
-            [
-                'type'=> $surcharges_type,
-		        'value'=> $surcharges_value
-            ]
-        ],
-        'createDate'=> $createDate,
-        'deliveryType'=> $deliveryType,            
-    ];
-//==================================================== WITHOUT HAZMAT (Regulated)
-        include ("includes/hazmat.php"); //========================================================== ALL Hazmat Data File
-
-       // var_dump($data);
-
-       // $obj = json_decode($data);
-
-       // echo $obj->parcelType;
-
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-        if($hazmat=='yes' && $h_hazmatType=='Regulated'){
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-
-            //=====print a json file
-            $path = 'file.json';
-            $jsonString = json_encode($data, JSON_PRETTY_PRINT);
-            // Write in the file
-            $fp = fopen($path, 'w');
-            fwrite($fp, $jsonString);
-            fclose($fp);
-        }
-
-
-
-        if($hazmat=='yes' && $h_hazmatType=='NonRegulated'){
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data_hazmat_nonregulated));
-    
-                //=====print a json file
-                $path = 'file.json';
-                $jsonString = json_encode($data_hazmat_nonregulated, JSON_PRETTY_PRINT);
-                // Write in the file
-                $fp = fopen($path, 'w');
-                fwrite($fp, $jsonString);
-                fclose($fp);
-            }
-
-
-
-
-        if($hazmat=='no'){
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data_without_hazmat));
-            //=====print a json file
-            $path = 'file.json';
-            $jsonString = json_encode($data_without_hazmat, JSON_PRETTY_PRINT);
-            // Write in the file
-            $fp = fopen($path, 'w');
-            fwrite($fp, $jsonString);
-            fclose($fp);
-        }
-
-
-//echo $row['billing_account_id'];
 }
 
 
@@ -345,7 +199,59 @@ if(curl_errno($curl)){
 $json_resp = (array) json_decode($resp, false);
 //var_dump($json_resp);
 ?>
+
+
+
+<!-- Main content -->
+<section class="content">
+      <div class="container-fluid">
+        <!-- form start -->
+              <div class="col-12">
+                     
+                     <div class="card card-primary">
+                       <div class="card-header">
+                         <h3 class="card-title">Detail Rate:</h3>
+                       </div>
+                       <div>                
+                 </div>
+                       <div class="card-body"> 
+                     
+                           <?php
+                         include ("../model/connect.php");
+                         //$id = $_REQUEST['id'];
+                         
+
+
+                         $url = 'https://sandbox-smart4i.dicom.com/v1/rate/shipment/'.$id;  // NEED TO Change -------------------------
+                         //$url = 'https://smart4i.dicom.com/v1/rate/shipment/'.$id;
+
+$username = "wahida@jrponline.com";
+$password = "Dicom.123";
+
+//Initiate cURL.
+$ch = curl_init($url);
+ 
+curl_setopt($ch, CURLOPT_USERPWD, $username . ":" . $password);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+
+$response = curl_exec($ch);
+
+$result = json_decode($response, true);
+$result2 = json_encode($response, JSON_PRETTY_PRINT);
+
+$json2 = json_encode(json_decode($response), JSON_PRETTY_PRINT);
+echo '<pre>' . $json2 . '</pre>';
+
+if(curl_errno($ch)){
+    //If an error occured, throw an Exception.
+    throw new Exception(curl_error($ch));
+}                        
+?>                             
+                </div><!-- /.container-fluid -->
+              </section>
 <?php
+}
 }
 else{
     print("<script>window.alert('Sorry Your are not Logged in');</script>");

@@ -48,7 +48,7 @@
                                         <input name="countryCode" id="countryCode" type="text" class="form-control"  required>* eg. CA.
                                     </div>
                                     <div class="form-group">
-                                        <label>Customer Name</label>
+                                        <label>Name</label>
                                         <input name="customerName" id="customerName" type="text" class="form-control"  required>
                                     </div>
                                     
@@ -107,6 +107,7 @@
                     <th>e-mail</th>
                     <th>Department</th>
                     <th>Phone</th>
+                    <th></th>
                   </tr>
                   </thead>
                   <tbody>
@@ -137,17 +138,21 @@
                     ?>
 
                       <tr>
+                      <form method=post action="../model/update_sender_list.php" id="myForm1">    
                       <td><?php echo $count;?></td>
-                      <td><?php echo $fullName;?></td>
-                      <td><?php echo $addressLine1;?></td>
-                      <td><?php echo $city;?></td>
-                      <td><?php echo $province;?></td>
-                      <td><?php echo $postalCode;?></td>
-                      <td><?php echo $countryCode;?></td>
-                      <td><?php echo $customerName;?></td>
-                      <td><?php echo $email;?></td>
-                      <td><?php echo $department;?></td>
-                      <td><?php echo $telephone;?></td>
+                      <td><input name="sender_id" id="sender_id" value="<?php echo $sender_id;?>" type="hidden" class="form-control">
+                          <input name="fullName" id="fullName" value="<?php echo $fullName;?>" type="text" class="form-control"></td>
+                      <td><input name="addressLine1" id="addressLine1" value="<?php echo $addressLine1;?>" type="text" class="form-control"></td>
+                      <td><input name="city" id="city" value="<?php echo $city;?>" type="text" class="form-control"></td>
+                      <td><input name="province" id="province" value="<?php echo $province;?>" type="text" class="form-control"></td>
+                      <td><input name="postalCode" id="postalCode" value="<?php echo $postalCode;?>" type="text" class="form-control"></td>
+                      <td><input name="countryCode" id="countryCode" value="<?php echo $countryCode;?>" type="text" class="form-control"></td>
+                      <td><input name="customerName" id="customerName" value="<?php echo $customerName;?>" type="text" class="form-control"></td>
+                      <td><input name="email" id="email" value="<?php echo $email;?>" type="text" class="form-control"></td>
+                      <td><input name="department" id="department" value="<?php echo $department;?>" type="text" class="form-control"></td>
+                      <td><input name="telephone" id="telephone" value="<?php echo $telephone;?>" type="text" class="form-control"></td>
+                      <td><button type="submit" class="btn btn-block btn-info btn-xs">>></button></td>  
+                    </form>
                       </tr>
                       <?php
                       }
@@ -166,6 +171,7 @@
                     <th>e-mail</th>
                     <th>Department</th>
                     <th>Phone</th>
+                    <th></th>
                   </tr>
                   </tfoot>
                 </table>

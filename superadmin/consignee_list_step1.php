@@ -9,7 +9,8 @@ session_start();
 // } else {
 //   echo "No login";
 // }  
-$login=$_SESSION['login'];
+include('includes/session.php');
+if(isset($_SESSION['login'])){ 
 $account_type=$_SESSION['account_type'];
 $first_name=$_SESSION['first_name'];
 $user_id=$_SESSION['user_id'];
@@ -60,6 +61,7 @@ function validate(){
   </div> -->
 
   <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
   <!-- <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="200"> -->
    
 
@@ -88,11 +90,11 @@ function validate(){
       </li>
 
       
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
-      </li>
+      </li> -->
     </ul>
   </nav>
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -209,6 +211,7 @@ function validate(){
 
 <?php
         }
+      }
             
 else{
     

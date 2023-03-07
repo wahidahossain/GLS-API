@@ -112,7 +112,7 @@ if ($result->num_rows > 0) {
 // ====================================== API setup ==========================================
 //echo $billing_account_id = $row['billing_account_id'];
 $billing_account_id = $row['billing_account_id'];
-$url = "https://sandbox-smart4i.dicom.com/v1/shipment/";        // NEED TO Change -------------------------
+$url = "https://sandbox-smart4i.dicom.com/v1/shipment/";    // NEED TO Change -------------------------
 //$url = "https://smart4i.dicom.com/v1/shipment/";
 $username = 'wahida@jrponline.com';
 $password = 'Dicom.123';
@@ -129,8 +129,9 @@ curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json', 'Conten
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
 //SSL verify disabled
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
 $data = 
 [   
     'division'=> $division,

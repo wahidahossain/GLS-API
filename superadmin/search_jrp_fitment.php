@@ -1,16 +1,13 @@
 <?php
 
 session_start();
-  
-$login=$_SESSION['login'];
+include('includes/session.php');
+if(isset($_SESSION['login'])){ 
 $account_type=$_SESSION['account_type'];
 $first_name=$_SESSION['first_name'];
 $user_id=$_SESSION['user_id'];
-
-
-
-if($login=="superadmin"){
-        $login=$_SESSION['login'];
+if($login=="superadmin")
+{       $login=$_SESSION['login'];
         $account_type=$_SESSION['account_type'];
         $first_name=$_SESSION['first_name'];
         $user_id=$_SESSION['user_id'];
@@ -53,11 +50,11 @@ if($login=="superadmin"){
           </form>
         </div>
       </li>      
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
-      </li>
+      </li> -->
      
     </ul>
   </nav>
@@ -174,7 +171,7 @@ if($login=="superadmin"){
 
 <?php
         }
-            
+      }  
 else{
     
     print("<script>window.location='../index_warning.php?pass=message'</script>");  

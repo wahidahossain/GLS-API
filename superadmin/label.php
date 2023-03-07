@@ -1,12 +1,13 @@
 <?php
 session_start();
-        $login=$_SESSION['login'];
+include('includes/session.php');
+if(isset($_SESSION['login'])){ 
+$account_type=$_SESSION['account_type'];
+$first_name=$_SESSION['first_name'];
+$user_id=$_SESSION['user_id'];
+if($login=="superadmin")
+{       $login=$_SESSION['login'];
         $account_type=$_SESSION['account_type'];
-        $first_name=$_SESSION['first_name'];
-        $user_id=$_SESSION['user_id'];
-
- if($login=="superadmin"){
- $account_type=$_SESSION['account_type'];
         $first_name=$_SESSION['first_name'];
         $user_id=$_SESSION['user_id'];
     ?>
@@ -15,17 +16,12 @@ session_start();
 include ("../model/connect.php");
 $id = $_REQUEST['id'];
 $url = "https://sandbox-smart4i.dicom.com/v1/shipment/label/".$id;     // NEED TO Change -------------------------
-//$url = "https://smart4i.dicom.com/v1/shipment/label/".$id;
 $username = 'wahida@jrponline.com';
 $password = 'Dicom.123';
 
 //Initiate cURL.
 $curl = curl_init($url);
 curl_setopt($curl, CURLOPT_USERPWD, $username . ':' . $password); 
-
-//SSL verify disabled
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
 //$curl = curl_init();
 curl_setopt($curl, CURLOPT_URL, $url);
@@ -48,6 +44,10 @@ if(curl_errno($curl)){
 //Get the HTTP status code.
 $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
+//SSL verify disabled
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
 //Close the cURL handler.
 curl_close($curl);
 
@@ -63,6 +63,7 @@ curl_close($curl);
 
 ?>
 <?php
+}
 }
 else{
     print("<script>window.alert('Sorry Your are not Logged in');</script>");

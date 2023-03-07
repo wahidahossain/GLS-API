@@ -1,18 +1,7 @@
-<?php
-session_start();
-        $login=$_SESSION['login'];
-        $account_type=$_SESSION['account_type'];
-        $first_name=$_SESSION['first_name'];
-        $user_id=$_SESSION['user_id'];
 
- if($login=="superadmin"){
- $account_type=$_SESSION['account_type'];
-        $first_name=$_SESSION['first_name'];
-        $user_id=$_SESSION['user_id'];
-    ?>
 
 <?php
-include ("../model/connect.php");
+//include ("../model/connect.php");
 //$new_shipment_id = $_REQUEST['new_shipment_id'];
 
 
@@ -45,6 +34,7 @@ include ("../model/connect.php");
 //     return $data;
 // }
 
+/*
 $url = "https://sandbox-smart4i.dicom.com/v1/shipment/label/1574255";
 $username = 'wahida@jrponline.com';
 $password = 'Dicom.123';
@@ -57,6 +47,7 @@ curl_setopt($curl, CURLOPT_USERPWD, $username . ':' . $password);
 curl_setopt($curl, CURLOPT_URL, $url);
 curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/pdf', 'Content-Type: application/pdf'));
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+*/
 // $saveTo = "newspaper.pdf";
 
 
@@ -71,12 +62,13 @@ curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
 //Create a cURL handle.
 //$curl =curl_init($url);
-
+/*
 curl_setopt($curl,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0');
 curl_setopt($curl, CURLOPT_REFERER, 'http://www.borkumer-zeitung.de/3d-flip-book/02-08-2019/');
 curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($curl, CURLOPT_HEADER, false);
+*/
 //Pass our file handle to cURL.
 //curl_setopt($curl, CURLOPT_FILE, $fp);
 
@@ -84,6 +76,7 @@ curl_setopt($curl, CURLOPT_HEADER, false);
 //curl_setopt($curl, CURLOPT_TIMEOUT, 20);
 
 //Execute the request.
+/*
 header('Content-type: application/pdf');
 echo curl_exec($curl);
 
@@ -107,12 +100,64 @@ if($statusCode == 200){
     echo "Status Code: " . $statusCode;
 }
 
+*/
+?>
 
-?>
-<?php
+
+<!DOCTYPE html>
+<html>
+<body>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script>
+function count_title() {
+  var el_t = document.getElementById("titletag");
+  var maxLength = 10;
+  //var el_c = document.getElementById("ctitle");
+ // el_c.innerHTML = maxLength - el_t.value.length;
+//   el_t.oninput = function() {
+//    var max = document.getElementById("ctitle").innerHTML = maxLength - this.value.length;
+   
+//   };
+  if(el_t.value.length>=10){
+        alert("Alert: Customer name field have more than 40 characters!")
 }
-else{
-    print("<script>window.alert('Sorry Your are not Logged in');</script>");
-    print("<script>window.location='../index.php'</script>");
 }
-?>
+// function count_mdesc() {
+//   var el_t = document.getElementById("metadesc");
+//   var maxLength = 320;
+//   var el_c = document.getElementById("cmdesc");
+//   el_c.innerHTML = maxLength - el_t.value.length;
+//   el_t.oninput = function() {
+//     document.getElementById("cmdesc").innerHTML = maxLength - this.value.length;
+    
+//   };
+// }
+
+
+window.onload = function() {
+    count_title();
+};
+
+// var maxLength = $(this).attr("maxlength");
+//         if(maxLength == $(this).val().length) {
+//         alert("You can't write more than " + maxLength +" chacters")
+// }
+
+</script>
+
+<script>                                                  
+        // $("input").on("keyup",function() {
+        // var maxLength = $(this).attr("maxlength");
+        // if(maxLength == $(this).val().length) {
+        // alert("You can't write more than " + maxLength +" chacters")
+        // }
+        // })
+</script>
+<label for="titletag">Title</label><br>
+<div class="wrap">
+<textarea name="text" id="titletag" cols="100" rows="1" oninput="count_title('ctitle')">Default title (variable length).</textarea><span id="ctitle" class="counter"></span></div><br><br>
+<a href="test.php">Link</a>
+
+</body>
+</html>

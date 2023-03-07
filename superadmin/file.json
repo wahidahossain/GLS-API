@@ -1,11 +1,11 @@
 {
-    "division": "Freight",
-    "category": "Freight",
+    "division": "Express",
+    "category": "Parcel",
     "paymentType": "Prepaid",
-    "billingAccount": "14358256",
-    "note": "Freight note testing.....",
+    "billingAccount": "761971",
+    "note": "",
     "sender": {
-        "addressLine1": "2344 S Sheridan Way,  ON ",
+        "addressLine1": "2344 S Sheridan Way,  ON.",
         "city": "Mississauga",
         "provinceCode": "ON",
         "postalCode": "L5J 2M4",
@@ -20,37 +20,43 @@
         }
     },
     "consignee": {
-        "addressLine1": "1264 Stone Road",
-        "city": "Oxford Mills",
-        "provinceCode": "ON",
-        "postalCode": "K0G1S0",
+        "addressLine1": "201 Rue Principale",
+        "city": "Frampton",
+        "provinceCode": "QC",
+        "postalCode": "G0R1M0",
         "countryCode": "CA",
-        "customerName": "Mottified PF",
+        "customerName": "Jack Performance",
         "contact": {
-            "fullName": "Ryan Mott",
+            "fullName": "Jacques Gaulin",
             "language": "EN",
-            "email": "getmottified@gmail.com",
+            "email": "info@jackperformance.com",
             "department": "none",
-            "telephone": "6137946688"
+            "telephone": "4184795359"
         }
     },
-    "unitOfMeasurement": "KC",
+    "unitOfMeasurement": "LI",
     "parcels": [
         {
             "parcelType": "Box",
-            "quantity": 1,
-            "weight": 1.6,
-            "length": 12,
-            "depth": 12,
-            "width": 12
+            "quantity": "1",
+            "weight": "11",
+            "length": "11",
+            "depth": "11",
+            "width": "11"
         }
     ],
     "surcharges": [
         {
-            "type": "COD",
-            "value": "333"
+            "type": "PHDS",
+            "value": ""
         }
     ],
-    "createDate": "2023-01-12 11:45:22",
-    "deliveryType": "GRD"
+    "createDate": "2023-03-01 13:16:16",
+    "deliveryType": "GRD",
+    "references": [
+        {
+            "type": "INV",
+            "code": "1223"
+        }
+    ]
 }

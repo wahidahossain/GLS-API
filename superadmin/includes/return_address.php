@@ -36,40 +36,39 @@
                                         </select>                                     
                                     <div class="form-group">
                                         <label>City</label>
-                                        <input name="city" id="city" type="text" class="form-control"  required>
+                                        <input name="city" id="city" type="text" class="form-control" required>
                                     </div>
                                     </div>
                                     <div class="form-group">
                                         <label>Postal Code</label>
-                                        <input name="postalCode" id="postalCode" type="text" class="form-control"  required> * eg. H9P2T7.
+                                        <input name="postalCode" id="postalCode" type="text" class="form-control" required> * eg. H9P2T7.
                                     </div>
                                     <div class="form-group">
                                         <label>Country Code</label>
-                                        <input name="countryCode" id="countryCode" type="text" class="form-control"  required>* eg. CA.
+                                        <input name="countryCode" id="countryCode" type="text" class="form-control" required>* eg. CA.
                                     </div>
                                     <div class="form-group">
-                                        <label>Customer Name</label>
-                                        <input name="customerName" id="customerName" type="text" class="form-control"  required>
-                                    </div>
-                                    
+                                        <label>Name</label>
+                                        <input name="customerName" id="customerName" type="text" class="form-control" required>
+                                    </div>                                    
                                     <div class="card-header">
                                         <h3 class="card-title text-primary">Sender Contact</h3>
                                     </div>
                                             <div class="form-group">
                                                 <label>Full Name</label>
-                                                <input name="fullName" id="fullName" type="text" class="form-control"  required>
+                                                <input name="fullName" id="fullName" type="text" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label>e-mail</label>
-                                                <input name="email" id="email" type="text" class="form-control"  required>
+                                                <input name="email" id="email" type="text" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label>Department</label>
-                                                <input name="department" id="department" type="text" class="form-control"  required>
+                                                <input name="department" id="department" type="text" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label>Phone</label>
-                                                <input name="telephone" id="telephone" type="text" class="form-control"  required>
+                                                <input name="telephone" id="telephone" type="text" class="form-control" required>
                                             </div>
                                     <!-- sender end =========================================== -->                                                 
                                     <div class="form-group">
@@ -128,17 +127,21 @@
                     $date = $row['date'];                                         
                     ?>
                       <tr>
-                      <td><?php echo $count;?></td>
-                      <td><?php echo $fullName;?></td>
-                      <td><?php echo $addressLine1;?></td>
-                      <td><?php echo $city;?></td>
-                      <td><?php echo $province;?></td>
-                      <td><?php echo $postalCode;?></td>
-                      <td><?php echo $countryCode;?></td>
-                      <td><?php echo $customerName;?></td>
-                      <td><?php echo $email;?></td>
-                      <td><?php echo $department;?></td>
-                      <td><?php echo $telephone;?></td>
+                      <form method=post action="../model/update_return_address.php" id="myForm1">
+                        <td><?php echo $count;?></td>
+                        <td><input name="return_id" id="return_id" type="hidden" class="form-control" value="<?php echo $return_id;?>">
+                            <input name="fullName" id="fullName" type="text" class="form-control" value="<?php echo $fullName;?>"></td>
+                        <td><input name="addressLine1" id="addressLine1" type="text" class="form-control"  value="<?php echo $addressLine1;?>"></td>
+                        <td><input name="city" id="city" type="text" class="form-control"  value="<?php echo $city;?>"></td>
+                        <td><input name="province" id="province" type="text" class="form-control"  value="<?php echo $province;?>"></td>
+                        <td><input name="postalCode" id="postalCode" type="text" class="form-control"  value="<?php echo $postalCode;?>"></td>
+                        <td><input name="countryCode" id="countryCode" type="text" class="form-control"  value="<?php echo $countryCode;?>"></td>
+                        <td><input name="customerName" id="customerName" type="text" class="form-control"  value="<?php echo $customerName;?>"></td>
+                        <td><input name="email" id="email" type="text" class="form-control"  value="<?php echo $email;?>"></td>
+                        <td><input name="department" id="department" type="text" class="form-control"  value="<?php echo $department;?>"></td>
+                        <td><input name="telephone" id="telephone" type="text" class="form-control"  value="<?php echo $telephone;?>"></td>
+                        <td><button type="submit" class="btn btn-block btn-info btn-xs">>></button></td>
+                      </form>
                       </tr>
                       <?php
                       }

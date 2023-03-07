@@ -9,7 +9,8 @@ session_start();
 // } else {
 //   echo "No login";
 // }  
-$login=$_SESSION['login'];
+include('includes/session.php');
+if(isset($_SESSION['login'])){ 
 $account_type=$_SESSION['account_type'];
 $first_name=$_SESSION['first_name'];
 $user_id=$_SESSION['user_id'];
@@ -25,12 +26,20 @@ if($login=="superadmin")
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>JRP Insight| Dashboard</title>
-
+  <?php
+  $OrderNumber = $_REQUEST['OrderNumber'];
+  $jrp_account_no = $_REQUEST['jrp_account_no'];
+  ?>
+  <script type="text/javascript">
+function getval(sel)
+{  
+  self.location='add_new_freight.php?OrderNumber=<?php echo $OrderNumber;?>&jrp_account_no=<?php echo $jrp_account_no;?>&tp='+ sel.value;
+}
+</script>
   <?php
   include("includes/css.php");
   ?>
 <!-- OnClick Event Handler -->
-
 
 
 </head>
@@ -43,8 +52,8 @@ if($login=="superadmin")
   </div> -->
 
   <!-- Navbar -->
-  <!-- <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="200"> -->
-   
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+  <!-- <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="200"> -->  
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
@@ -68,11 +77,8 @@ if($login=="superadmin")
             </div>
           </form>
         </div>
-      </li>
-
-      
-      <li class="nav-item">
-        
+      </li>      
+      <li class="nav-item">        
       </li>
     </ul>
   </nav>
@@ -190,6 +196,7 @@ if($login=="superadmin")
 
 <?php
         }
+      }
             
 else{
     
