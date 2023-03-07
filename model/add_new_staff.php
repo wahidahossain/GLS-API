@@ -1,12 +1,13 @@
 <?php
 session_start();
-        $login=$_SESSION['login'];
+include('../superadmin/includes/session.php');
+if(isset($_SESSION['login'])){ 
+$account_type=$_SESSION['account_type'];
+$first_name=$_SESSION['first_name'];
+$user_id=$_SESSION['user_id'];
+if($login=="superadmin" || $login=="staff" || $login=="dev")
+{       $login=$_SESSION['login'];
         $account_type=$_SESSION['account_type'];
-        $first_name=$_SESSION['first_name'];
-        $user_id=$_SESSION['user_id'];
-
- if($login=="superadmin"){
- $account_type=$_SESSION['account_type'];
         $first_name=$_SESSION['first_name'];
         $user_id=$_SESSION['user_id'];
     ?>
@@ -73,19 +74,15 @@ CURRENT_TIMESTAMP, '$ip', '$account_type', '$user_excol1', '$user_excol2', '$use
 ";
 
 $result2=mysqli_query($con, $sql1) or die( 'Couldnot execute query'. mysql_error());
-
 include ("notify.php");
-
-
-
 // if($result2){
     //print("<script>window.alert('Staff information added successfully');</script>");    
 // } 
 }
 print("<script>window.location='../superadmin/add_new_staff.php'</script>");
-
 ?>
 <?php
+}
 }
 else{
     print("<script>window.alert('Sorry Your are not Logged in');</script>");

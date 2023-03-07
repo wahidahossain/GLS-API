@@ -1,0 +1,973 @@
+<?php
+
+//adding diffrenet category of product into the json to connect with GLS server
+$emparray = array();
+// $result2 = mysqli_query($con, "SELECT `parcelType`, `quantity`, `weight`, `length`, `depth`, `width` FROM `new_shipment` WHERE `col_5`='$col_5'");
+$result2 = mysqli_query($con, "SELECT * FROM `new_shipment` WHERE `col_5`='$col_5'");
+$results_array = array();
+while($rows = $result2->fetch_assoc()) {
+    
+    //no hazmat
+    if($hazmat=='no'){
+    $results_array = array('parcelType'=>$rows['parcelType'], 'quantity'=>$rows['quantity'], 'weight'=>$rows['weight'], 'length'=>$rows['length'], 'depth'=>$rows['depth'], 'width'=>$rows['width']);   
+    $emparray_no[] = json_decode(json_encode($results_array, JSON_FORCE_OBJECT), TRUE);    
+}
+
+    //hazmat:yes with Nonregulated option:
+    if($hazmat == 'yes' && $h_hazmatType == 'NonRegulated'){
+        $results_array = array('parcelType'=>$rows['parcelType'], 
+        'quantity'=>$rows['quantity'], 
+        'weight'=>$rows['weight'], 
+        'length'=>$rows['length'], 
+        'depth'=>$rows['depth'], 
+        'width'=>$rows['width'],
+        'hazmat'=>array('description'=>$rows['h_description'],
+        'hazmatType'=>$rows['h_hazmatType'])
+        );
+        $emparray_yes_non[] = json_decode(json_encode($results_array, JSON_FORCE_OBJECT), TRUE);
+    }
+
+    //hazmat:yes with Regulated option:
+    if($hazmat=='yes' && $h_hazmatType=='Regulated'){
+        $results_array = array('parcelType'=>$rows['parcelType'], 
+        'quantity'=>$rows['quantity'], 
+        'weight'=>$rows['weight'], 
+        'length'=>$rows['length'], 
+        'depth'=>$rows['depth'], 
+        'width'=>$rows['width'],
+        'hazmat'=>array(
+                        'phone'=>$rows['h_phone'],
+                        'erapReference'=>$rows['erapReference'],
+                        'number'=>$rows['number'],
+                        'shippingName'=>$rows['shippingName'],
+                        'primaryClass'=>$rows['primaryClass'],
+                        'subsidiaryClass'=>$rows['subsidiaryClass'],
+                        'toxicByInhalation'=>$rows['toxicByInhalation'],
+                        'packingGroup'=>$rows['packingGroup'],
+                        'hazmatType'=>$rows['h_hazmatType'])
+        );
+        $emparray_yes_reg[] = json_decode(json_encode($results_array, JSON_FORCE_OBJECT), TRUE);
+    }
+    //calling "" $emparray "" to add different products ==========
+    //$emparray[] = json_decode(json_encode($results_array, JSON_FORCE_OBJECT), TRUE);
+}
+//end adding diffrenet category of product into the json to connect with GLS server
+
+
+//with hazmat, regulated & appointment type : required ======================= 1
+$data = 
+[   
+    'division'=> $division,
+    'category'=> $category,
+    'paymentType'=> $paymentType,
+    'billingAccount'=> $billing_account,
+    'note'=> $note,
+        'sender'=> [
+           
+         'addressLine1'=> $sender_addressLine1,
+         'city'=> $sender_city,
+         'provinceCode'=> $sender_province,
+         'postalCode'=> $sender_postalCode,
+         'countryCode'=> $sender_countryCode,
+         'customerName'=> $sender_customerName,
+         'contact'=>[            
+                'fullName'=> $sender_fullName,
+                'language'=>  'EN',
+                'email'=> $sender_email,
+                'department'=> $sender_department,
+                'telephone'=> $sender_telephone,
+            ]
+        ],
+        'consignee'=> [       
+         'addressLine1'=> $consignee_addressLine1,
+         'city'=> $consignee_city,
+         'provinceCode'=> $consignee_province,
+         'postalCode'=> $consignee_postalCode,
+         'countryCode'=> $consignee_countryCode,
+         'customerName'=> $consignee_customerName,
+         'contact'=> [                                
+             'fullName'=> $consignee_fullName,
+             'language'=>  'EN',
+             'email'=> $consignee_email,
+             'department'=> $consignee_department,
+             'telephone'=> $consignee_telephone,
+            ]
+        ],
+        'unitOfMeasurement'=> $unitOfMeasurement,         
+        'parcels'=> $emparray,
+        'surcharges'=> [
+            [
+                'type'=> $surcharges_type,
+		        'value'=> $surcharges_value
+            ]
+        ],        
+     'appointment'=> 
+        [
+                'type'=>'Required',
+                'phone'=> $app_phone
+        ],
+        'createDate'=> $createDate,
+        'deliveryType'=> $deliveryType,            
+    ];
+//with hazmat, regulated & appointment type : scheduled ======================= 2
+    $data_schedule = 
+    [   
+        'division'=> $division,
+        'category'=> $category,
+        'paymentType'=> $paymentType,
+        'billingAccount'=> $billing_account,
+        'note'=> $note,
+            'sender'=> [
+               
+             'addressLine1'=> $sender_addressLine1,
+             'city'=> $sender_city,
+             'provinceCode'=> $sender_province,
+             'postalCode'=> $sender_postalCode,
+             'countryCode'=> $sender_countryCode,
+             'customerName'=> $sender_customerName,
+             'contact'=>[            
+                    'fullName'=> $sender_fullName,
+                    'language'=>  'EN',
+                    'email'=> $sender_email,
+                    'department'=> $sender_department,
+                    'telephone'=> $sender_telephone,
+                ]
+            ],
+            'consignee'=> [       
+             'addressLine1'=> $consignee_addressLine1,
+             'city'=> $consignee_city,
+             'provinceCode'=> $consignee_province,
+             'postalCode'=> $consignee_postalCode,
+             'countryCode'=> $consignee_countryCode,
+             'customerName'=> $consignee_customerName,
+             'contact'=> [                                
+                 'fullName'=> $consignee_fullName,
+                 'language'=>  'EN',
+                 'email'=> $consignee_email,
+                 'department'=> $consignee_department,
+                 'telephone'=> $consignee_telephone,
+                ]
+            ],
+            'unitOfMeasurement'=> $unitOfMeasurement,         
+            'parcels'=> [
+                [               
+                    'parcelType'=> $parcelType,
+                    'quantity'=> $quantity,
+                    'weight'=> $weight,
+                    'length'=> $length,
+                    'depth'=> $depth,
+                    'width'=> $width,
+                    'hazmat'=> [
+                        'phone'=> $h_phone,
+                        'erapReference'=> $h_erapReference,
+                        'number'=> $h_number,
+                        'shippingName'=> $h_shippingName,
+                        'primaryClass'=> $h_primaryClass,
+                        'subsidiaryClass'=> $h_subsidiaryClass,
+                        'toxicByInhalation'=> $h_toxicByInhalation,
+                        'packingGroup'=> $h_packingGroup,
+                        'hazmatType'=> $h_hazmatType,
+                    ]            
+                ]
+            ],
+            'surcharges'=> [
+                [
+                    'type'=> $surcharges_type,
+                    'value'=> $surcharges_value
+                ]
+            ],        
+         'appointment'=> 
+            [
+                    'type'=>'Scheduled',
+                    'date'=> $date,
+                    'time'=> $time
+            ],
+            'createDate'=> $createDate,
+            'deliveryType'=> $deliveryType,            
+        ];
+
+//Freight Account ==================================Non regulated + required ===== 3
+$data_hazmat_nonregulated_required = 
+[   
+    'division'=> $division,
+    'category'=> $category,
+    'paymentType'=> $paymentType,
+    'billingAccount'=> $billing_account,
+    'note'=> $note,
+        'sender'=> [
+         'addressLine1'=> $sender_addressLine1,
+         'city'=> $sender_city,
+         'provinceCode'=> $sender_province,
+         'postalCode'=> $sender_postalCode,
+         'countryCode'=> $sender_countryCode,
+         'customerName'=> $sender_customerName,
+         'contact'=>[            
+                'fullName'=> $sender_fullName,
+                'language'=>  'EN',
+                'email'=> $sender_email,
+                'department'=> $sender_department,
+                'telephone'=> $sender_telephone,
+            ]
+        ],
+        'consignee'=> [       
+         'addressLine1'=> $consignee_addressLine1,
+         'city'=> $consignee_city,
+         'provinceCode'=> $consignee_province,
+         'postalCode'=> $consignee_postalCode,
+         'countryCode'=> $consignee_countryCode,
+         'customerName'=> $consignee_customerName,
+         'contact'=> [                                            
+             'fullName'=> $consignee_fullName,
+             'language'=>  'EN',
+             'email'=> $consignee_email,
+             'department'=> $consignee_department,
+             'telephone'=> $consignee_telephone,
+            ]
+        ],
+        'unitOfMeasurement'=> $unitOfMeasurement,         
+        'parcels'=> [
+            [
+               
+                'parcelType'=> $parcelType,
+                'quantity'=> $quantity,
+                'weight'=> $weight,
+                'length'=> $length,
+                'depth'=> $depth,
+                'width'=> $width,
+                'hazmat'=> [
+                    'description'=> $h_description,                        
+                    'hazmatType'=> $h_hazmatType,
+                ]   
+            ]
+        ],
+        'surcharges'=> [
+            [
+                'type'=> $surcharges_type,
+                'value'=> $surcharges_value
+            ]
+        ],          
+     'appointment'=> 
+        [
+                'type'=>'Required',
+                'phone'=> $app_phone
+        ],
+        'createDate'=> $createDate,
+        'deliveryType'=> $deliveryType,       
+    
+    ];
+
+
+    //Freight Account ==================================Non regulated + schedule ===== 4
+$data_hazmat_nonregulated_schedule = 
+[   
+    'division'=> $division,
+    'category'=> $category,
+    'paymentType'=> $paymentType,
+    'billingAccount'=> $billing_account,
+    'note'=> $note,
+        'sender'=> [
+         'addressLine1'=> $sender_addressLine1,
+         'city'=> $sender_city,
+         'provinceCode'=> $sender_province,
+         'postalCode'=> $sender_postalCode,
+         'countryCode'=> $sender_countryCode,
+         'customerName'=> $sender_customerName,
+         'contact'=>[            
+                'fullName'=> $sender_fullName,
+                'language'=>  'EN',
+                'email'=> $sender_email,
+                'department'=> $sender_department,
+                'telephone'=> $sender_telephone,
+            ]
+        ],
+        'consignee'=> [       
+         'addressLine1'=> $consignee_addressLine1,
+         'city'=> $consignee_city,
+         'provinceCode'=> $consignee_province,
+         'postalCode'=> $consignee_postalCode,
+         'countryCode'=> $consignee_countryCode,
+         'customerName'=> $consignee_customerName,
+         'contact'=> [                                            
+             'fullName'=> $consignee_fullName,
+             'language'=>  'EN',
+             'email'=> $consignee_email,
+             'department'=> $consignee_department,
+             'telephone'=> $consignee_telephone,
+            ]
+        ],
+        'unitOfMeasurement'=> $unitOfMeasurement,         
+        'parcels'=> [
+            [
+               
+                'parcelType'=> $parcelType,
+                'quantity'=> $quantity,
+                'weight'=> $weight,
+                'length'=> $length,
+                'depth'=> $depth,
+                'width'=> $width,
+                'hazmat'=> [
+                    'description'=> $h_description,                        
+                    'hazmatType'=> $h_hazmatType,
+                ]   
+            ]
+        ],
+        'surcharges'=> [
+            [
+                'type'=> $surcharges_type,
+                'value'=> $surcharges_value
+            ]
+        ],          
+     'appointment'=> 
+        [
+            'type'=>'Scheduled',
+            'date'=> $date,
+            'time'=> $time
+        ],
+        'createDate'=> $createDate,
+        'deliveryType'=> $deliveryType,       
+    
+    ];
+
+//Frieght =======================+ without hazmat + appointment/required +==================== 5
+$data_without_hazmat_required = 
+[   
+    'division'=> $division,
+    'category'=> $category,
+    'paymentType'=> $paymentType,
+    'billingAccount'=> $billing_account,
+    'note'=> $note,
+        'sender'=> [
+         'addressLine1'=> $sender_addressLine1,
+         'city'=> $sender_city,
+         'provinceCode'=> $sender_province,
+         'postalCode'=> $sender_postalCode,
+         'countryCode'=> $sender_countryCode,
+         'customerName'=> $sender_customerName,
+         'contact'=>[            
+                'fullName'=> $sender_fullName,
+                'language'=>  'EN',
+                'email'=> $sender_email,
+                'department'=> $sender_department,
+                'telephone'=> $sender_telephone,
+            ]
+        ],
+        'consignee'=> [       
+         'addressLine1'=> $consignee_addressLine1,
+         'city'=> $consignee_city,
+         'provinceCode'=> $consignee_province,
+         'postalCode'=> $consignee_postalCode,
+         'countryCode'=> $consignee_countryCode,
+         'customerName'=> $consignee_customerName,
+         'contact'=> [                                            
+             'fullName'=> $consignee_fullName,
+             'language'=>  'EN',
+             'email'=> $consignee_email,
+             'department'=> $consignee_department,
+             'telephone'=> $consignee_telephone,
+            ]
+        ],
+        'unitOfMeasurement'=> $unitOfMeasurement,         
+        'parcels'=> [
+            [
+               
+                'parcelType'=> $parcelType,
+                'quantity'=> $quantity,
+                'weight'=> $weight,
+                'length'=> $length,
+                'depth'=> $depth,
+                'width'=> $width,
+            ]
+        ],
+        'surcharges'=> [
+            [
+                'type'=> $surcharges_type,
+		        'value'=> $surcharges_value
+            ]
+        ],
+        'appointment'=> 
+        [
+                'type'=>'Required',
+                'phone'=> $app_phone
+        ],
+        'createDate'=> $createDate,
+        'deliveryType'=> $deliveryType,       
+    
+    ];
+
+//Frieght =======================+ without hazmat + appointment/schedule +==================== 6
+$data_without_hazmat_schedule = 
+[   
+    'division'=> $division,
+    'category'=> $category,
+    'paymentType'=> $paymentType,
+    'billingAccount'=> $billing_account,
+    'note'=> $note,
+        'sender'=> [
+         'addressLine1'=> $sender_addressLine1,
+         'city'=> $sender_city,
+         'provinceCode'=> $sender_province,
+         'postalCode'=> $sender_postalCode,
+         'countryCode'=> $sender_countryCode,
+         'customerName'=> $sender_customerName,
+         'contact'=>[            
+                'fullName'=> $sender_fullName,
+                'language'=>  'EN',
+                'email'=> $sender_email,
+                'department'=> $sender_department,
+                'telephone'=> $sender_telephone,
+            ]
+        ],
+        'consignee'=> [       
+         'addressLine1'=> $consignee_addressLine1,
+         'city'=> $consignee_city,
+         'provinceCode'=> $consignee_province,
+         'postalCode'=> $consignee_postalCode,
+         'countryCode'=> $consignee_countryCode,
+         'customerName'=> $consignee_customerName,
+         'contact'=> [                                            
+             'fullName'=> $consignee_fullName,
+             'language'=>  'EN',
+             'email'=> $consignee_email,
+             'department'=> $consignee_department,
+             'telephone'=> $consignee_telephone,
+            ]
+        ],
+        'unitOfMeasurement'=> $unitOfMeasurement,         
+        'parcels'=> [
+            [
+               
+                'parcelType'=> $parcelType,
+                'quantity'=> $quantity,
+                'weight'=> $weight,
+                'length'=> $length,
+                'depth'=> $depth,
+                'width'=> $width,
+            ]
+        ],
+        'surcharges'=> [
+            [
+                'type'=> $surcharges_type,
+		        'value'=> $surcharges_value
+            ]
+        ],
+        'appointment'=> 
+        [
+            'type'=>'Scheduled',
+            'date'=> $date,
+            'time'=> $time
+        ],
+        'createDate'=> $createDate,
+        'deliveryType'=> $deliveryType,       
+    
+    ];
+
+//Frieght =======================+ without hazmat + appointment/schedule +==================== 7
+$data_nonregulated_hazmat_none = 
+    [   
+        'division'=> $division,
+        'category'=> $category,
+        'paymentType'=> $paymentType,
+        'billingAccount'=> $billing_account,
+        'note'=> $note,
+            'sender'=> [
+               
+             'addressLine1'=> $sender_addressLine1,
+             'city'=> $sender_city,
+             'provinceCode'=> $sender_province,
+             'postalCode'=> $sender_postalCode,
+             'countryCode'=> $sender_countryCode,
+             'customerName'=> $sender_customerName,
+             'contact'=>[            
+                    'fullName'=> $sender_fullName,
+                    'language'=>  'EN',
+                    'email'=> $sender_email,
+                    'department'=> $sender_department,
+                    'telephone'=> $sender_telephone,
+                ]
+            ],
+            'consignee'=> [       
+             'addressLine1'=> $consignee_addressLine1,
+             'city'=> $consignee_city,
+             'provinceCode'=> $consignee_province,
+             'postalCode'=> $consignee_postalCode,
+             'countryCode'=> $consignee_countryCode,
+             'customerName'=> $consignee_customerName,
+             'contact'=> [                                
+                 'fullName'=> $consignee_fullName,
+                 'language'=>  'EN',
+                 'email'=> $consignee_email,
+                 'department'=> $consignee_department,
+                 'telephone'=> $consignee_telephone,
+                ]
+            ],
+            'unitOfMeasurement'=> $unitOfMeasurement,         
+            'parcels'=> [
+                [               
+                    'parcelType'=> $parcelType,
+                    'quantity'=> $quantity,
+                    'weight'=> $weight,
+                    'length'=> $length,
+                    'depth'=> $depth,
+                    'width'=> $width,
+                    'hazmat'=> [
+                        'phone'=> $h_phone,
+                        'erapReference'=> $h_erapReference,
+                        'number'=> $h_number,
+                        'shippingName'=> $h_shippingName,
+                        'primaryClass'=> $h_primaryClass,
+                        'subsidiaryClass'=> $h_subsidiaryClass,
+                        'toxicByInhalation'=> $h_toxicByInhalation,
+                        'packingGroup'=> $h_packingGroup,
+                        'hazmatType'=> $h_hazmatType,
+                    ]            
+                ]
+            ],
+            'surcharges'=> [
+                [
+                    'type'=> $surcharges_type,
+                    'value'=> $surcharges_value
+                ]
+            ],       
+            'createDate'=> $createDate,
+            'deliveryType'=> $deliveryType,            
+        ];
+
+//Freight Account ==================================Non regulated + none ===== 8
+$data_hazmat_nonregulated_none = 
+[   
+    'division'=> $division,
+    'category'=> $category,
+    'paymentType'=> $paymentType,
+    'billingAccount'=> $billing_account,
+    'note'=> $note,
+        'sender'=> [
+         'addressLine1'=> $sender_addressLine1,
+         'city'=> $sender_city,
+         'provinceCode'=> $sender_province,
+         'postalCode'=> $sender_postalCode,
+         'countryCode'=> $sender_countryCode,
+         'customerName'=> $sender_customerName,
+         'contact'=>[            
+                'fullName'=> $sender_fullName,
+                'language'=>  'EN',
+                'email'=> $sender_email,
+                'department'=> $sender_department,
+                'telephone'=> $sender_telephone,
+            ]
+        ],
+        'consignee'=> [       
+         'addressLine1'=> $consignee_addressLine1,
+         'city'=> $consignee_city,
+         'provinceCode'=> $consignee_province,
+         'postalCode'=> $consignee_postalCode,
+         'countryCode'=> $consignee_countryCode,
+         'customerName'=> $consignee_customerName,
+         'contact'=> [                                            
+             'fullName'=> $consignee_fullName,
+             'language'=>  'EN',
+             'email'=> $consignee_email,
+             'department'=> $consignee_department,
+             'telephone'=> $consignee_telephone,
+            ]
+        ],
+        'unitOfMeasurement'=> $unitOfMeasurement,         
+        'parcels'=> [
+            [
+               
+                'parcelType'=> $parcelType,
+                'quantity'=> $quantity,
+                'weight'=> $weight,
+                'length'=> $length,
+                'depth'=> $depth,
+                'width'=> $width,
+                'hazmat'=> [
+                    'description'=> $h_description,                        
+                    'hazmatType'=> $h_hazmatType,
+                ]   
+            ]
+        ],
+        'surcharges'=> [
+            [
+                'type'=> $surcharges_type,
+                'value'=> $surcharges_value
+            ]
+        ],
+        'createDate'=> $createDate,
+        'deliveryType'=> $deliveryType,       
+    
+    ];
+
+//Frieght =======================+ without hazmat + appointment/none +==================== 9
+/*
+$emparray = array();
+$result2 = mysqli_query($con, "SELECT `parcelType`, `quantity`, `weight`, `length`, `depth`, `width` FROM `new_shipment` WHERE `col_5`='$col_5'");
+$results_array = array();
+while($rows = $result2->fetch_assoc()) {
+   // foreach($result2 as $results){
+    $results_array = array('parcelType'=>$rows['parcelType'], 'quantity'=>$rows['quantity'], 'weight'=>$rows['weight'], 'length'=>$rows['length'], 'depth'=>$rows['depth'], 'width'=>$rows['width']
+    );
+    //$mid_value = json_decode(json_encode($results_array, JSON_FORCE_OBJECT), TRUE);
+    $emparray[] = json_decode(json_encode($results_array, JSON_FORCE_OBJECT), TRUE);
+}
+
+*/
+    $data_without_hazmat_none = 
+[   
+    'division'=> $division,
+    'category'=> $category,
+    'paymentType'=> $paymentType,
+    'billingAccount'=> $billing_account,
+    'note'=> $note,
+        'sender'=> [
+         'addressLine1'=> $sender_addressLine1,
+         'city'=> $sender_city,
+         'provinceCode'=> $sender_province,
+         'postalCode'=> $sender_postalCode,
+         'countryCode'=> $sender_countryCode,
+         'customerName'=> $sender_customerName,
+         'contact'=>[            
+                'fullName'=> $sender_fullName,
+                'language'=>  'EN',
+                'email'=> $sender_email,
+                'department'=> $sender_department,
+                'telephone'=> $sender_telephone,
+            ]
+        ],
+        'consignee'=> [       
+         'addressLine1'=> $consignee_addressLine1,
+         'city'=> $consignee_city,
+         'provinceCode'=> $consignee_province,
+         'postalCode'=> $consignee_postalCode,
+         'countryCode'=> $consignee_countryCode,
+         'customerName'=> $consignee_customerName,
+         'contact'=> [                                            
+             'fullName'=> $consignee_fullName,
+             'language'=>  'EN',
+             'email'=> $consignee_email,
+             'department'=> $consignee_department,
+             'telephone'=> $consignee_telephone,
+            ]
+        ],
+        'unitOfMeasurement'=> $unitOfMeasurement,         
+        'parcels'=> 
+           // ['parcelType'=>'Skid', 'quantity'=>$rows['quantity'], 'weight'=>$rows['weight'], 'length'=>$rows['length'], 'depth'=>$rows['depth'], 'width'=>$rows['width']],
+           // ['parcelType'=>'Box', 'quantity'=>$rows['quantity'], 'weight'=>$rows['weight'], 'length'=>$rows['length'], 'depth'=>$rows['depth'], 'width'=>$rows['width']],
+
+               /*
+                'parcelType'=> $parcelType,
+                'quantity'=> $quantity,
+                'weight'=> $weight,
+                'length'=> $length,
+                'depth'=> $depth,
+                'width'=> $width,
+                */
+                //$mid_value
+                $emparray
+           
+        ,
+        'surcharges'=> [
+            [
+                'type'=> $surcharges_type,
+		        'value'=> $surcharges_value
+            ]
+        ],        
+        'createDate'=> $createDate,
+        'deliveryType'=> $deliveryType,       
+    
+    ];
+
+
+//new code ------------------------------
+
+
+//end of new code
+//Frieght ====================================================
+    $data_hazmat_regulated = 
+    [   
+        'division'=> $division,
+        'category'=> $category,
+        'paymentType'=> $paymentType,
+        'billingAccount'=> $billing_account,
+        'note'=> $note,
+            'sender'=> [
+             'addressLine1'=> $sender_addressLine1,
+             'city'=> $sender_city,
+             'provinceCode'=> $sender_province,
+             'postalCode'=> $sender_postalCode,
+             'countryCode'=> $sender_countryCode,
+             'customerName'=> $sender_customerName,
+             'contact'=>[            
+                    'fullName'=> $sender_fullName,
+                    'language'=>  'EN',
+                    'email'=> $sender_email,
+                    'department'=> $sender_department,
+                    'telephone'=> $sender_telephone,
+                ]
+            ],
+            'consignee'=> [       
+             'addressLine1'=> $consignee_addressLine1,
+             'city'=> $consignee_city,
+             'provinceCode'=> $consignee_province,
+             'postalCode'=> $consignee_postalCode,
+             'countryCode'=> $consignee_countryCode,
+             'customerName'=> $consignee_customerName,
+             'contact'=> [                                            
+                 'fullName'=> $consignee_fullName,
+                 'language'=>  'EN',
+                 'email'=> $consignee_email,
+                 'department'=> $consignee_department,
+                 'telephone'=> $consignee_telephone,
+                ]
+            ],
+            'unitOfMeasurement'=> $unitOfMeasurement,         
+            'parcels'=> [
+                [
+                   
+                    'parcelType'=> $parcelType,
+                    'quantity'=> $quantity,
+                    'weight'=> $weight,
+                    'length'=> $length,
+                    'depth'=> $depth,
+                    'width'=> $width,
+                    'hazmat'=> [
+                        'phone'=> $h_phone,
+                        'erapReference'=> $h_erapReference,
+                        'number'=> $h_number,
+                        'shippingName'=> $h_shippingName,
+                        'primaryClass'=> $h_primaryClass,
+                        'subsidiaryClass'=> $h_subsidiaryClass,
+                        'toxicByInhalation'=> $h_toxicByInhalation,
+                        'packingGroup'=> $h_packingGroup,
+                        'hazmatType'=> $h_hazmatType,
+                    ]   
+                ]
+            ],
+            'surcharges'=> [
+                [
+                    'type'=> $surcharges_type,
+                    'value'=> $surcharges_value
+                ]
+            ],
+            'appointment'=> 
+            [
+                'type'=>'Required',
+                'phone'=> $app_phone
+            ],
+            'createDate'=> $createDate,
+            'deliveryType'=> $deliveryType,       
+        
+        ];
+
+
+//==================================================== WITH HAZMAT parcel
+$data = 
+[   
+    'division'=> $division,
+    'category'=> $category,
+    'paymentType'=> $paymentType,
+    'billingAccount'=> $billing_account,
+    'note'=> $note,
+        'sender'=> [
+           
+         'addressLine1'=> $sender_addressLine1,
+         'city'=> $sender_city,
+         'provinceCode'=> $sender_province,
+         'postalCode'=> $sender_postalCode,
+         'countryCode'=> $sender_countryCode,
+         'customerName'=> $sender_customerName,
+         'contact'=>[            
+                'fullName'=> $sender_fullName,
+                'language'=>  'EN',
+                'email'=> $sender_email,
+                'department'=> $sender_department,
+                'telephone'=> $sender_telephone,
+            ]
+        ],
+        'consignee'=> [       
+         'addressLine1'=> $consignee_addressLine1,
+         'city'=> $consignee_city,
+         'provinceCode'=> $consignee_province,
+         'postalCode'=> $consignee_postalCode,
+         'countryCode'=> $consignee_countryCode,
+         'customerName'=> $consignee_customerName,
+         'contact'=> [                                
+             'fullName'=> $consignee_fullName,
+             'language'=>  'EN',
+             'email'=> $consignee_email,
+             'department'=> $consignee_department,
+             'telephone'=> $consignee_telephone,
+            ]
+        ],
+        'unitOfMeasurement'=> $unitOfMeasurement,         
+        'parcels'=> [
+            [               
+                'parcelType'=> $parcelType,
+                'quantity'=> $quantity,
+                'weight'=> $weight,
+                'length'=> $length,
+                'depth'=> $depth,
+                'width'=> $width,
+                'hazmat'=> [
+                    'phone'=> $h_phone,
+                    'erapReference'=> $h_erapReference,
+                    'number'=> $h_number,
+                    'shippingName'=> $h_shippingName,
+                    'primaryClass'=> $h_primaryClass,
+                    'subsidiaryClass'=> $h_subsidiaryClass,
+                    'toxicByInhalation'=> $h_toxicByInhalation,
+                    'packingGroup'=> $h_packingGroup,
+                    'hazmatType'=> $h_hazmatType,
+                ],
+                'groupId'=> 1,
+                'requestReturnLabel'=> $requestReturnLabel, 
+                'returnWaybill'=> $returnWaybill                
+            ]
+        ],
+        'surcharges'=> [
+            [
+                'type'=> $surcharges_type,
+		        'value'=> $surcharges_value
+            ]
+        ],
+        'createDate'=> $createDate,
+        'deliveryType'=> $deliveryType,
+        'references'=> [
+            [
+             'type'=> $references_type,
+             'code'=> $references_code,
+            ]
+        ]    
+    ];
+
+
+        //Parcel =====================without_hazmat===================
+$data_without_hazmat_parcel = 
+[   
+    'division'=> $division,
+    'category'=> $category,
+    'paymentType'=> $paymentType,
+    'billingAccount'=> $billing_account,
+    'note'=> $note,
+        'sender'=> [
+         'addressLine1'=> $sender_addressLine1,
+         'city'=> $sender_city,
+         'provinceCode'=> $sender_province,
+         'postalCode'=> $sender_postalCode,
+         'countryCode'=> $sender_countryCode,
+         'customerName'=> $sender_customerName,
+         'contact'=>[            
+                'fullName'=> $sender_fullName,
+                'language'=>  'EN',
+                'email'=> $sender_email,
+                'department'=> $sender_department,
+                'telephone'=> $sender_telephone,
+            ]
+        ],
+        'consignee'=> [       
+         'addressLine1'=> $consignee_addressLine1,
+         'city'=> $consignee_city,
+         'provinceCode'=> $consignee_province,
+         'postalCode'=> $consignee_postalCode,
+         'countryCode'=> $consignee_countryCode,
+         'customerName'=> $consignee_customerName,
+         'contact'=> [                                            
+             'fullName'=> $consignee_fullName,
+             'language'=>  'EN',
+             'email'=> $consignee_email,
+             'department'=> $consignee_department,
+             'telephone'=> $consignee_telephone,
+            ]
+        ],
+        'unitOfMeasurement'=> $unitOfMeasurement,         
+        // 'parcels'=> [
+        //     [
+               
+        //         'parcelType'=> $parcelType,
+        //         'quantity'=> $quantity,
+        //         'weight'=> $weight,
+        //         'length'=> $length,
+        //         'depth'=> $depth,
+        //         'width'=> $width,
+        //     ]
+        // ],
+        'parcels'=> 
+        
+             $emparray
+        
+     ,
+        'surcharges'=> [
+            [
+                'type'=> $surcharges_type,
+		        'value'=> $surcharges_value
+            ]
+        ],
+        'createDate'=> $createDate,
+        'deliveryType'=> $deliveryType, 
+        'references'=> [
+            [
+             'type'=> $references_type,
+             'code'=> $references_code,
+            ]
+        ]       
+    
+    ];
+//Parcel account==================hazmat_nonregulated=========================
+        $data_hazmat_nonregulated_parcel = 
+    [   
+        'division'=> $division,
+        'category'=> $category,
+        'paymentType'=> $paymentType,
+        'billingAccount'=> $billing_account,
+        'note'=> $note,
+            'sender'=> [
+             'addressLine1'=> $sender_addressLine1,
+             'city'=> $sender_city,
+             'provinceCode'=> $sender_province,
+             'postalCode'=> $sender_postalCode,
+             'countryCode'=> $sender_countryCode,
+             'customerName'=> $sender_customerName,
+             'contact'=>[            
+                    'fullName'=> $sender_fullName,
+                    'language'=>  'EN',
+                    'email'=> $sender_email,
+                    'department'=> $sender_department,
+                    'telephone'=> $sender_telephone,
+                ]
+            ],
+            'consignee'=> [       
+             'addressLine1'=> $consignee_addressLine1,
+             'city'=> $consignee_city,
+             'provinceCode'=> $consignee_province,
+             'postalCode'=> $consignee_postalCode,
+             'countryCode'=> $consignee_countryCode,
+             'customerName'=> $consignee_customerName,
+             'contact'=> [                                            
+                 'fullName'=> $consignee_fullName,
+                 'language'=>  'EN',
+                 'email'=> $consignee_email,
+                 'department'=> $consignee_department,
+                 'telephone'=> $consignee_telephone,
+                ]
+            ],
+            'unitOfMeasurement'=> $unitOfMeasurement,         
+            'parcels'=> 
+            $emparray,
+
+            'surcharges'=> [
+                [
+                    'type'=> $surcharges_type,
+                    'value'=> $surcharges_value
+                ]
+            ],
+            'createDate'=> $createDate,
+            'deliveryType'=> $deliveryType,
+        'references'=> [
+            [
+             'type'=> $references_type,
+             'code'=> $references_code,
+            ]
+        ]       
+        
+        ];
+
+?>

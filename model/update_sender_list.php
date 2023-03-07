@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('../superadmin/includes/session.php');
 if(isset($_SESSION['login'])){ 
 $account_type=$_SESSION['account_type'];
@@ -14,8 +15,8 @@ if($login=="superadmin" || $login=="staff" || $login=="dev")
 include ("connect.php");
 
 //error_reporting(0);
-
-$addressLine1 = $_REQUEST['addressline1'];
+$sender_id = $_REQUEST['sender_id'];
+$addressLine1 = $_REQUEST['addressLine1'];
 $province = $_REQUEST['province'];
 $city = $_REQUEST['city'];
 $postalCode = $_REQUEST['postalCode'];
@@ -26,11 +27,11 @@ $email = $_REQUEST['email'];
 $department = $_REQUEST['department'];
 $telephone = $_REQUEST['telephone'];
 
-$sql1="INSERT INTO `return` (`return_id`, `addressLine1`, `province`, `city`, `postalCode`, `countryCode`, `customerName`, `fullName`, `email`, `department`, `telephone`, `col_1`, `col_2`, `date`) 
-       VALUES (NULL, '$addressLine1', '$province', '$city', '$postalCode', '$countryCode', '$customerName', '$fullName', '$email', '$department', '$telephone', '', '', NOW());";
+$sql1="UPDATE `sender` SET `addressLine1` = '$addressLine1', `province` = '$province', `city` = '$city', `postalCode` = '$postalCode', `countryCode` = '$countryCode', `customerName` = '$customerName', `fullName` = '$fullName', `email` = '$email', `department` = '$department', `telephone` = '$telephone', `date` = NOW() WHERE `sender`.`sender_id` = '$sender_id'; ";
 
 $result2=mysqli_query($con, $sql1) or die( 'Couldnot execute query'. mysqli_error($con));
-print("<script>window.location='../superadmin/return_address.php'</script>");
+print("<script>window.location='../superadmin/sender_list.php'</script>");
+
 ?>
 <?php
 }

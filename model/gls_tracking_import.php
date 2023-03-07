@@ -1,16 +1,13 @@
 <?php
 
 session_start();
-  
-$login=$_SESSION['login'];
+include('../superadmin/includes/session.php');
+if(isset($_SESSION['login'])){ 
 $account_type=$_SESSION['account_type'];
 $first_name=$_SESSION['first_name'];
 $user_id=$_SESSION['user_id'];
-
-
-
-if($login=="staff"){
-        $login=$_SESSION['login'];
+if($login=="superadmin" || $login=="staff" || $login=="dev")
+{       $login=$_SESSION['login'];
         $account_type=$_SESSION['account_type'];
         $first_name=$_SESSION['first_name'];
         $user_id=$_SESSION['user_id'];
@@ -93,7 +90,8 @@ print("<script>window.location='../staff/gls_import_tracking.php'</script>");
 //print("<script>window.alert('successfully');</script>");
 //header("Location: ../superadmin/add_new_customer.php".$qstring);
 
-}            
+} 
+}           
 else{    
     print("<script>window.location='../index_warning.php?pass=message'</script>"); 
 }

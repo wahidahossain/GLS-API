@@ -5,7 +5,7 @@ if(isset($_SESSION['login'])){
 $account_type=$_SESSION['account_type'];
 $first_name=$_SESSION['first_name'];
 $user_id=$_SESSION['user_id'];
-if($login=="superadmin" || $login=="staff" || $login=="dev")
+if($login=="superadmin")
 {       $login=$_SESSION['login'];
         $account_type=$_SESSION['account_type'];
         $first_name=$_SESSION['first_name'];
@@ -14,13 +14,13 @@ if($login=="superadmin" || $login=="staff" || $login=="dev")
 <?php
 include ("connect.php");
 
-//error_reporting(0);
+error_reporting(0);
 
-$billing_account_id = $_POST['billing_account_id'];
-$sender_id = $_POST['sender_id'];
-//$consignee_id = $_POST['consignee_id'];
-$division = $_POST['division'];
-$category = $_POST['category'];
+$billing_account_id = $_REQUEST['billing_account_id'];
+$sender_id = $_REQUEST['sender_id'];
+//$consignee_id = $_REQUEST['consignee_id'];
+$division = $_REQUEST['division'];
+$category = $_REQUEST['category'];
 if($category=='Freight')
 {
   $parcelType = $_POST['parcelTypeFreight'];
@@ -32,72 +32,90 @@ if($category=='Parcel')
   $surcharges_type = $_POST['surcharges_type_parcel'];
 }
 
-$paymentType = $_POST['paymentType'];
-$note = $_POST['note'];
-$unitOfMeasurement = $_POST['unitOfMeasurement'];
-
-$quantity = $_POST['quantity'];
-$weight = $_POST['weight'];
-$length = $_POST['length'];
-$depth = $_POST['depth'];
-$width = $_POST['width'];
+$paymentType = $_REQUEST['paymentType'];
+$note = $_REQUEST['note'];
+$unitOfMeasurement = $_REQUEST['unitOfMeasurement'];
 
 
-$hazmat = $_POST['hazmat'];
-$h_phone = $_POST['h_phone'];
-$h_erapReference = $_POST['h_erapReference'];
-$h_number = $_POST['h_number'];
-$h_shippingName = $_POST['h_shippingName'];
-$h_primaryClass = $_POST['h_primaryClass'];
-$h_subsidiaryClass = $_POST['h_subsidiaryClass'];
-$h_toxicByInhalation = $_POST['h_toxicByInhalation'];
-$h_packingGroup = $_POST['h_packingGroup'];
-$h_description = $_POST['h_description'];
-$h_hazmatType = $_POST['h_hazmatType'];
+// if(isSet($_POST['parcelTypeFreight']))
+// {
+//   $parcelType = $_POST['parcelTypeFreight'];
+// }
+// else{
+//   $parcelType = $_POST['parcelTypeParcelCanada'];
+//   }
+
+//if (!isset($parcelType)) {
+  // echo  $parcelType1 = $_REQUEST['parcelTypeParcelCanada'];
+  // }
+  // else{
+  // echo  $parcelType1 = $_REQUEST['parcelTypeFreight'];
+  // }
+  // $parcelType = $parcelType1;
+
+
+// if (isset($_POST["email"] != "")){
+//     $parcelType = $_REQUEST['parcelTypeFreight'];
+// }
+// else{
+//     $parcelType = $_REQUEST['parcelTypeParcelCanada'];
+// }
+
+$quantity = $_REQUEST['quantity'];
+$weight = $_REQUEST['weight'];
+$length = $_REQUEST['length'];
+$depth = $_REQUEST['depth'];
+$width = $_REQUEST['width'];
+
+
+
+$hazmat = $_REQUEST['hazmat'];
+$h_phone = $_REQUEST['h_phone'];
+$h_erapReference = $_REQUEST['h_erapReference'];
+$h_number = $_REQUEST['h_number'];
+$h_shippingName = $_REQUEST['h_shippingName'];
+$h_primaryClass = $_REQUEST['h_primaryClass'];
+$h_subsidiaryClass = $_REQUEST['h_subsidiaryClass'];
+$h_toxicByInhalation = $_REQUEST['h_toxicByInhalation'];
+$h_packingGroup = $_REQUEST['h_packingGroup'];
+$h_description = $_REQUEST['h_description'];
+$h_hazmatType = $_REQUEST['h_hazmatType'];
 if($category=='Parcel'){
-  $requestReturnLabel = $_POST['requestReturnLabel'];
+  $requestReturnLabel = $_REQUEST['requestReturnLabel'];
       if ($requestReturnLabel == 'true') {
-        $returnWaybill = $_POST['returnWaybill'];
+        $returnWaybill = $_REQUEST['returnWaybill'];
       }
-
-if(isset($returnWaybill)){
-  $returnWaybill = $_POST['returnWaybill'];
-}
-else{
-  $returnWaybill = '';
-}
-
-  $references_type = $_POST['references_type'];
-  $references_code = $_POST['references_code'];
+  $references_type = $_REQUEST['references_type'];
+  $references_code = $_REQUEST['references_code'];
 }
 if($category=='Freight'){
-  $appointment_type = $_POST['appointment_type'];
-  $app_phone = $_POST['app_phone'];
-  $date = $_POST['date'];
-  $time = $_POST['time'];
+  $appointment_type = $_REQUEST['appointment_type'];
+  $app_phone = $_REQUEST['app_phone'];
+  $date = $_REQUEST['date'];
+  $time = $_REQUEST['time'];
 }
-//$surcharges_type = $_POST['surcharges_type'];
-$surcharges_value = $_POST['surcharges_value'];
-$promoCodes_status = $_POST['promoCodes_status'];
-$promoCodes = $_POST['promoCodes'];
-$deliveryType = $_POST['deliveryType'];
-$return_id = $_POST['return_id'];
+//$surcharges_type = $_REQUEST['surcharges_type'];
+$surcharges_value = $_REQUEST['surcharges_value'];
+$promoCodes_status = $_REQUEST['promoCodes_status'];
+$promoCodes = $_REQUEST['promoCodes'];
+$deliveryType = $_REQUEST['deliveryType'];
+
+$return_id = $_REQUEST['return_id'];
 
 // Data for consignee table :: 
-$addressLine1 = $_POST['addressline1'];
-$addressLine2 = $_POST['addressline2'];
-$province = $_POST['province'];
-$city = $_POST['city'];
-$postalCode = $_POST['postalCode'];
-$countryCode = $_POST['countryCode'];
-$customerName = $_POST['customerName'];
-$fullName = $_POST['fullName'];
-$email = $_POST['email'];
-$department = $_POST['department'];
-$telephone = $_POST['telephone'];
-$jrp_acc_no = $_POST['jrp_acc_no'];
-$OrderNumber = $_POST['OrderNumber'];
-$col_5 = time().'-'.mt_rand();
+$addressLine1 = $_REQUEST['addressline1'];
+$addressLine2 = $_REQUEST['addressline2'];
+$province = $_REQUEST['province'];
+$city = $_REQUEST['city'];
+$postalCode = $_REQUEST['postalCode'];
+$countryCode = $_REQUEST['countryCode'];
+$customerName = $_REQUEST['customerName'];
+$fullName = $_REQUEST['fullName'];
+$email = $_REQUEST['email'];
+$department = $_REQUEST['department'];
+$telephone = $_REQUEST['telephone'];
+$jrp_acc_no = $_REQUEST['jrp_acc_no'];
+$OrderNumber = $_REQUEST['OrderNumber'];
 //counting maximum characters for customer name field ===
 $customerName_length = strlen($customerName);
 if($customerName_length > '40'){
@@ -129,6 +147,19 @@ if($hazmat == 'yes' && $surcharges_type != 'DGG')
     print("<script>window.location='../superadmin/add_new_parcel.php?OrderNumber=$OrderNumber&jrp_account_no=$jrp_acc_no'</script>");
     }
 }
+
+/*
+if($hazmat == 'no' && $surcharges_type == 'DGG')
+{
+  print("<script>window.alert('If you selected the “Surcharge Type : DGG”, you must set “Hazmat : Yes”');</script>");
+  if($category=='Freight'){
+  print("<script>window.location='../superadmin/add_new_freight.php?OrderNumber=$OrderNumber&jrp_account_no=$jrp_acc_no'</script>");
+  }
+  if($category=='Parcel'){
+    print("<script>window.location='../superadmin/add_new_parcel.php?OrderNumber=$OrderNumber&jrp_account_no=$jrp_acc_no'</script>");
+    }
+}
+*/
 else{
 //insert data into consignee table ========================================
 $sql1="INSERT INTO `consignee` (`consignee_id`, `addressLine1`, `addressLine2`, `province`, `city`, `postalCode`, `countryCode`, `customerName`, `fullName`, `email`, `department`, `telephone`, `jrp_acc_no`, `col_2`, `date`) 
@@ -141,56 +172,40 @@ $consignee_id = mysqli_insert_id($con);
 
 //insert data into new_shipment table =======================================
 if($category=='Parcel'){
-$parcelTypeParcelCanada = $_POST['parcelTypeParcelCanada'];
-$totalparcelTypeParcelCanada = sizeof($parcelTypeParcelCanada);
-for($i=0;$i<$totalparcelTypeParcelCanada;$i++) {
-
 $sql1="INSERT INTO `new_shipment` (`new_shipment_id`, `billing_account_id`, `sender_id`, `consignee_id`, `division`, `category`, `paymentType`, `note`, `unitOfMeasurement`, 
 `parcelType`, `quantity`, `weight`, `length`, `depth`, `width`, `hazmat`, `h_phone`, `h_erapReference`, `h_number`, `h_shippingName`, `h_primaryClass`, `h_subsidiaryClass`, 
 `h_toxicByInhalation`, `h_packingGroup`, `h_description`, `h_hazmatType`, `requestReturnLabel`, `returnWaybill`, `surcharges_type`, `surcharges_value`, `promoCodes_status`, `promoCodes`, 
 `createDate`, `deliveryType`, `references_type`, `references_code`, `return_id`, `col_1`, `col_2`, `col_3`, `col_4`, `col_5`, `col_6`, `col_7`, `col_8`) VALUES (NULL, '$billing_account_id', '$sender_id', '$consignee_id', 
-'$division', '$category', '$paymentType', '$note', '$unitOfMeasurement', '".$parcelTypeParcelCanada[$i]."', '".$quantity[$i]."', '".$weight[$i]."', '".$length[$i]."', '".$depth[$i]."', '".$width[$i]."', '$hazmat', '$h_phone', 
+'$division', '$category', '$paymentType', '$note', '$unitOfMeasurement', '$parcelType', $quantity, $weight, $length, $depth, $width, '$hazmat', '$h_phone', 
 '$h_erapReference', '$h_number', '$h_shippingName', '$h_primaryClass', '$h_subsidiaryClass', '$h_toxicByInhalation', '$h_packingGroup', '$h_description', '$h_hazmatType', '$requestReturnLabel', 
 '$returnWaybill', '$surcharges_type', '$surcharges_value', '$promoCodes_status', '$promoCodes', NOW(), '$deliveryType', '$references_type', '$references_code', '$return_id', 
-'', '', '','', '$col_5', '', '', '');";
-$result2=mysqli_query($con, $sql1) or die( 'Couldnot execute query'. mysqli_error($con));
+'', '', '','', '', '', '', '');";
 }
-}
-if($category=='Freight'){
-  $parcelTypeFreight = $_POST['parcelTypeFreight'];
-  $quantity = $_POST['quantity'];
-  $weight = $_POST['weight'];
-  $length = $_POST['length'];
-  $width = $_POST['width'];
-  $depth = $_POST['depth'];
 
-$totalparcelTypeFreight = sizeof($parcelTypeFreight);
-for($i=0;$i<$totalparcelTypeFreight;$i++) {
+if($category=='Freight'){
   $sql1="INSERT INTO `new_shipment` (`new_shipment_id`, `billing_account_id`, `sender_id`, `consignee_id`, `division`, `category`, `paymentType`, `note`, `unitOfMeasurement`, 
   `parcelType`, `quantity`, `weight`, `length`, `depth`, `width`, `hazmat`, `h_phone`, `h_erapReference`, `h_number`, `h_shippingName`, `h_primaryClass`, `h_subsidiaryClass`, 
   `h_toxicByInhalation`, `h_packingGroup`, `h_description`, `h_hazmatType`, `requestReturnLabel`, `returnWaybill`, `surcharges_type`, `surcharges_value`, `promoCodes_status`, `promoCodes`, 
   `createDate`, `deliveryType`, `references_type`, `references_code`, `return_id`, `col_1`, `col_2`, `col_3`, `col_4`, `col_5`, `col_6`, `col_7`, `col_8`) VALUES (NULL, '$billing_account_id', '$sender_id', '$consignee_id', 
-  '$division', '$category', '$paymentType', '$note', '$unitOfMeasurement', '".$parcelTypeFreight[$i]."', '".$quantity[$i]."', '".$weight[$i]."', '".$length[$i]."', '".$depth[$i]."', '".$width[$i]."', '$hazmat', '$h_phone', 
+  '$division', '$category', '$paymentType', '$note', '$unitOfMeasurement', '$parcelType', $quantity, $weight, $length, $depth, $width, '$hazmat', '$h_phone', 
   '$h_erapReference', '$h_number', '$h_shippingName', '$h_primaryClass', '$h_subsidiaryClass', '$h_toxicByInhalation', '$h_packingGroup', '$h_description', '$h_hazmatType', '', 
   '', '$surcharges_type', '$surcharges_value', '$promoCodes_status', '$promoCodes', NOW(), '$deliveryType', '', '', '$return_id', 
-  '$app_phone', '$appointment_type', '$date','$time', '$col_5', '', '', '');";
-
-  $result2=mysqli_query($con, $sql1) or die( 'Couldnot execute query'. mysqli_error($con));
-}
-}
-
-
-
+  '$app_phone', '$appointment_type', '$date','$time', '', '', '', '');";
+  }
+$result2=mysqli_query($con, $sql1) or die( 'Couldnot execute query'. mysqli_error($con));
 $last_id = mysqli_insert_id($con);
 //end new_shipment table =====================================================
 
+
+
+
 if($category=='Freight')
 {
-print("<script>window.location='../superadmin/new_shipment_freight_json.php?new_shipment_id=$last_id&col_5=$col_5&jrp_acc_no=$jrp_acc_no&OrderNumber=$OrderNumber'</script>"); //===freight
+print("<script>window.location='../superadmin/new_shipment_freight_json.php?new_shipment_id=$last_id&jrp_acc_no=$jrp_acc_no&OrderNumber=$OrderNumber'</script>"); //===freight
 }
 if($category=='Parcel')
 {
-print("<script>window.location='../superadmin/new_shipment_json.php?new_shipment_id=$last_id&col_5=$col_5&jrp_acc_no=$jrp_acc_no&OrderNumber=$OrderNumber'</script>"); //===parcel
+print("<script>window.location='../superadmin/new_shipment_json.php?new_shipment_id=$last_id&jrp_acc_no=$jrp_acc_no&OrderNumber=$OrderNumber'</script>"); //===parcel
 }
 }
 

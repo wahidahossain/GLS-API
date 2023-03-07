@@ -33,6 +33,6 @@ Thank you <br>
 ";
 mail($to, $subject, $body, $headers);
     print("<script>window.alert('Account activation link send to user e-mail address');</script>");
-    print("<script>window.location='../superadmin/dashboard.php'</script>");
+    print("<script>window.location='../superadmin/add_new_staff.php'</script>");
 
 ?> 

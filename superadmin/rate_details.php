@@ -1,16 +1,13 @@
 <?php
 
 session_start();
-  
-$login=$_SESSION['login'];
+include('includes/session.php');
+if(isset($_SESSION['login'])){ 
 $account_type=$_SESSION['account_type'];
 $first_name=$_SESSION['first_name'];
 $user_id=$_SESSION['user_id'];
-
-
-
-if($login=="staff"){
-        $login=$_SESSION['login'];
+if($login=="superadmin")
+{       $login=$_SESSION['login'];
         $account_type=$_SESSION['account_type'];
         $first_name=$_SESSION['first_name'];
         $user_id=$_SESSION['user_id'];
@@ -25,17 +22,27 @@ if($login=="staff"){
   <?php
   include("includes/css.php");
   ?>
+<!-- OnClick Event Handler -->
 
 
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
+
+  <!-- Preloader -->
   <!-- <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+    <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="200">
   </div> -->
+
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
   <!-- <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="200"> -->
+   
+
+    <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
+      <!-- Navbar Search -->
       <li class="nav-item">
         <a class="nav-link" data-widget="navbar-search" href="#" role="button">
           <i class="fas fa-search"></i>
@@ -55,37 +62,37 @@ if($login=="staff"){
             </div>
           </form>
         </div>
-      </li>      
-      <li class="nav-item">
-        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-          <i class="fas fa-expand-arrows-alt"></i>
-        </a>
       </li>
-     
+
+      
+      <!-- <li class="nav-item">
+        
+      </li> -->
     </ul>
   </nav>
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">   
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <?php
       include("includes/logo.php");
-    ?>
+      ?>
     <div class="sidebar">
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-    <?php
+      <?php
       include("includes/name.php");
-    ?>
+      ?>
        </div>
- <?php
-  include("includes/navbar.php");
-  ?>
+    <?php
+      include("includes/navbar.php");
+      ?>
     </div>
   </aside>
   <?php
   include("includes/wrapper.php");
   ?>
   <?php
-  include("includes/change_password_staff.php");
+  include("includes/rate_details.php");
   ?>    
-  </div> 
+  </div>
+ 
   <?php
   include("includes/footer.php");
   ?>
@@ -93,14 +100,11 @@ if($login=="staff"){
   </aside>
 </div>
 
-
-
 <!-- password_validator -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>  
 <script src="dist/js/password_validator.js"></script>
 <script src="dist/js/password_pattern.js"></script>
-
 
 <script src="plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -120,6 +124,7 @@ if($login=="staff"){
 <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
 <!-- jQuery Knob Chart -->
 <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+
 <!-- daterangepicker -->
 <script src="plugins/moment/moment.min.js"></script>
 <script src="plugins/daterangepicker/daterangepicker.js"></script>
@@ -134,7 +139,7 @@ if($login=="staff"){
 <!-- AdminLTE for demo purposes -->
 <!-- <script src="dist/js/demo.js"></script> -->
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<!-- <script src="dist/js/pages/dashboard.js"></script> -->
+<script src="dist/js/pages/dashboard.js"></script>
 
 <script src="plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
@@ -174,16 +179,12 @@ if($login=="staff"){
     });
   });
 </script>
-
 </body>
-
-
-
 </html>
 
 <?php
         }
-            
+      }   
 else{
     
     print("<script>window.location='../index_warning.php?pass=message'</script>");  

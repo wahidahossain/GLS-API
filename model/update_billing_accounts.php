@@ -15,36 +15,11 @@ if($login=="superadmin" || $login=="staff" || $login=="dev")
 include ("connect.php");
 
 //error_reporting(0);
-
+$billing_account_id = $_REQUEST['billing_account_id'];
 $billing_account = $_REQUEST['billing_account'];
-$category = $_REQUEST['category'];
-$sender_id = $_REQUEST['sender_id'];
-$return_id = $_REQUEST['return_id'];
 $note = $_REQUEST['note'];
 
-$sql1="INSERT INTO `billing_account`(
-`billing_account_id`, 
-`billing_account`, 
-`category`, 
-`note`, 
-`flag`, 
-`sender_id`, 
-`return_id`, 
-`user_id`, 
-`col_1`, 
-`date`
-)
-VALUES(
-    NULL,
-    '$billing_account',
-    '$category',
-    '$note',
-    '1',
-    '$sender_id',
-    '$return_id',
-    '$user_id',
-    '',
-    NOW());
+$sql1="UPDATE `billing_account` SET `billing_account` = '$billing_account', `note` = '$note', `date` = NOW() WHERE `billing_account`.`billing_account_id` = '$billing_account_id'; 
 ";
 
 $result2=mysqli_query($con, $sql1) or die( 'Couldnot execute query'. mysqli_error($con));

@@ -2,11 +2,8 @@
 session_start();
 
 include('connect.php');
-
-
 $name=$_REQUEST['username'];
 $pass=MD5($_REQUEST['password']);
-
 if($name!="" or $pass!=""){
 
 $query="select count(*) as cnt FROM `user` WHERE `username`='$name' and `password`='$pass'";
@@ -52,7 +49,7 @@ if($user_excol1 == "block"){
 }
 else{
 //-------------------------- superadmin ---------------------------------------
-        if($account_type == "superadmin" || $account_type == "staff" && $account_status == "1"){
+        if($account_type == "superadmin" || $account_type == "staff" || $account_type == "dev" && $account_status == "1"){
 
         $login="superadmin";
         $_SESSION['login']=$login;
@@ -62,14 +59,15 @@ else{
 
         $sql1="UPDATE `user` SET `logcount` = '$logcount1', `last_login` = NOW(), `ip` = '$ip1' WHERE `user`.`user_id` = '$user_id';";
         $result2=mysqli_query($con, $sql1);
-        if($account_type == "superadmin"){
+        if($account_type == "superadmin" || $account_type == "dev"){
             print("<script>window.location='../superadmin/dashboard.php'</script>");
         }
         if($account_type == "staff"){
             print("<script>window.location='../superadmin/gls_record_view.php'</script>");
         }
+
         }
-        if($account_type=="superadmin" || $account_type == "staff" && $account_status=="0")
+        if($account_type=="superadmin" || $account_type == "staff" || $account_type == "dev" && $account_status=="0")
         {
             print("<script>window.alert('Sorry Your Account is Disabled!');</script>");
             print("<script>window.location='../index.php'</script>");

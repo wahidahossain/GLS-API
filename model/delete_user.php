@@ -1,12 +1,13 @@
 <?php
 session_start();
-        $login=$_SESSION['login'];
+include('../superadmin/includes/session.php');
+if(isset($_SESSION['login'])){ 
+$account_type=$_SESSION['account_type'];
+$first_name=$_SESSION['first_name'];
+$user_id=$_SESSION['user_id'];
+if($login=="superadmin" || $login=="staff" || $login=="dev")
+{       $login=$_SESSION['login'];
         $account_type=$_SESSION['account_type'];
-        $first_name=$_SESSION['first_name'];
-        $user_id=$_SESSION['user_id'];
-
- if($login=="superadmin"){
- $account_type=$_SESSION['account_type'];
         $first_name=$_SESSION['first_name'];
         $user_id=$_SESSION['user_id'];
     ?>
@@ -24,11 +25,12 @@ $sql1="DELETE FROM `user` WHERE `user`.`user_id` = '$user_id1'";
 $result2=$result2=mysqli_query($con, $sql1) or die( 'Couldnot execute query'. mysql_error());
 
 if($result2){
-    print("<script>window.alert('Record deleted successfully');</script>");
-    print("<script>window.location='../superadmin/dashboard.php'</script>");
+   // print("<script>window.alert('Record deleted successfully');</script>");
+    print("<script>window.location='../superadmin/add_new_staff.php'</script>");
 }
 ?>
 <?php
+}
 }
 else{
     print("<script>window.alert('Sorry Your are not Logged in');</script>");
